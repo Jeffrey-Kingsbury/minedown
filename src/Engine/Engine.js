@@ -23,18 +23,19 @@ const RESOURCES = {
 const PLAYER = {
   wallet: 0,
   pickaxe: 0,
-  depth: 0,
+  pickaxeData: function(){
+    return PICKAXES[this.pickaxe] ? PICKAXES[this.pickaxe] : PICKAXES[0];
+  },
+  currentDepth: 0,
+  maxDepth: 0,
   buffs: {},
   nerfs: {},
   resources: {},
   buildings: {},
 };
 
-const DIGGING = (currentPickaxe, depth, buffs, nerfs) => {
-  // currentPickaxe determines the speed of the digging and the amount of resources gained
-  // It also determines if it is possible to dig at all depending on the depth
-  // depth determines the type of resources that are possible to be gained
-  // buffs and nerfs are arrays of objects that will be applied to the digging process
+const DIGGING = (currentPickaxe, depth, buffs = '', nerfs = '') => {
+
 };
 
 const UPGRADE_PICKAXE = (currentPickaxe, resources) => {};
@@ -46,3 +47,16 @@ const HIRE_MINER = (currentMiners, resources, depthUnlocks) => {};
 const UPGRADE_MINER = (currentMiners, resources) => {};
 
 const SELL_RESOURCE = (resource) => {};
+
+export {
+  PLAYER,
+  PICKAXES,
+  BUILDINGS,
+  RESOURCES,
+  DIGGING,
+  UPGRADE_PICKAXE,
+  CHANGE_DEPTH,
+  HIRE_MINER,
+  UPGRADE_MINER,
+  SELL_RESOURCE,
+};

@@ -1,17 +1,16 @@
 import { useState, createContext } from "react";
-import { PlayerData } from "./Data";
+import { PLAYER, DIGGING } from "./Engine/Engine.js";
 
-export const PlayerContext = createContext();
+export const playerContext = createContext();
 
-export const ContextProvider = ({children}) => {
-    const [player, setPlayer] = useState(PlayerData);
-    const [inventory, setInventory] = useState(PlayerData.inventory);
+export const ContextProvider = ({ children }) => {
+  const [playerData, setPlayer] = useState(PLAYER);
 
-    return (
-        <PlayerContext.Provider value={[player, setPlayer, inventory, setInventory]}>
-            {children}
-        </PlayerContext.Provider>
-    );
-}
+  return (
+    <playerContext.Provider value={{ playerData, setPlayer, DIGGING }}>
+      {children}
+    </playerContext.Provider>
+  );
+};
 
 export default ContextProvider;
