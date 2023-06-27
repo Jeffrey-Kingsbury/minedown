@@ -4,18 +4,45 @@ import { playerContext } from "./PlayerContext";
 import ProgressBar from "./ProgressBar";
 
 const GameArea = () => {
-  const { playerData, setPlayer, DIGGING } = useContext(playerContext);
-  const { wallet, pickaxe, currentDepth, maxDepth, buffs, nerfs, resources, buildings } = playerData;
-  const [currentProgress, setCurrentProgress] = useState(0);
+  const {
+    playerData,
+    setPlayerData,
+    DIGGING,
+    currentProgress,
+    setCurrentProgress,
+  } = useContext(playerContext);
+  const {
+    wallet,
+    pickaxe,
+    currentDepth,
+    maxDepth,
+    buffs,
+    nerfs,
+    resources,
+    buildings,
+  } = playerData;
 
-	
+  const digSpeed = playerData.pickaxeData().speed;
+  const pickaxeData = playerData.pickaxeData();
+  console.log(playerData.resources);
   return (
     <Wrapper>
       <p>Pickaxe: {playerData.pickaxeData().name}</p>
       <p>Depth: {currentDepth}</p>
       <p>Wallet: {wallet}</p>
-	  <ProgressBar currentProgress={currentProgress} />
-	  <button onClick={()=>{DIGGING(pickaxe, currentDepth)}}>dig</button>
+      <ProgressBar currentProgress={currentProgress} />
+      <button
+        onClick={() => {
+          if (currentProgress + digSpeed <= 100) {
+            setCurrentProgress(currentProgress + digSpeed);
+          } else {
+            setCurrentProgress(0);
+            DIGGING(currentDepth, playerData, setPlayerData);
+          }
+        }}
+      >
+        dig
+      </button>
     </Wrapper>
   );
 };
