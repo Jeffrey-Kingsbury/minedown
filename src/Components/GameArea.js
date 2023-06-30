@@ -51,7 +51,7 @@ const GameArea = () => {
                     Chance of unlocking a new depth:{' '}
                     {depthProgress.unlockChance <= 0
                         ? 0
-                        : (depthProgress.unlockChance * (currentDepth * 100)).toFixed(0)}
+                        : (depthProgress.unlockChance * 100).toFixed(0)}
                     %
                 </p>
                 <p>Wallet: {wallet}$</p>
