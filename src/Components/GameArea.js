@@ -5,10 +5,22 @@ import ProgressBar from './ProgressBar';
 import Blacksmith from './Blacksmith';
 import Button from './Button';
 import Container from './Container';
+import Store from './Store';
+import Recruiter from './Recruiter';
 
 const GameArea = () => {
-    const { playerData, setPlayerData, DIGGING, currentProgress, setCurrentProgress, CHECK_DISABLED, BUILD_BUILDING, PICKAXES, notify } =
-        useContext(playerContext);
+    const {
+        playerData,
+        setPlayerData,
+        DIGGING,
+        currentProgress,
+        setCurrentProgress,
+        CHECK_DISABLED,
+        BUILD_BUILDING,
+        BUILDINGS,
+        PICKAXES,
+        notify,
+    } = useContext(playerContext);
     const { wallet, currentDepth, maxDepth, depthProgress, resources, buildings } = playerData;
 
     const digSpeed = PICKAXES[playerData.pickaxe].speed;
@@ -19,7 +31,7 @@ const GameArea = () => {
             <ProgressBar currentProgress={currentProgress} />
             <Button
                 text={'Dig'}
-                func={() => {
+                onClick={() => {
                     if (currentProgress + digSpeed <= 100) {
                         setCurrentProgress(currentProgress + digSpeed);
                     } else {
@@ -28,7 +40,7 @@ const GameArea = () => {
                     }
                 }}
             />
-            
+
             <Container title={'Player Info'}>
                 <p>Pickaxe: {pickaxeData.name}</p>
                 <p>Pickaxe Max Depth: {pickaxeData.digDepth}</p>
@@ -61,9 +73,33 @@ const GameArea = () => {
             {!buildings.blacksmith && (
                 <Button
                     text={'Build Blacksmith (25 Sand, 10 Stone, 5 Coal)'}
-                    disabled={CHECK_DISABLED(playerData, 'blacksmith')}
-                    func={() => {
+                    disabled={CHECK_DISABLED(playerData, BUILDINGS.blacksmith.cost)}
+                    onClick={() => {
                         BUILD_BUILDING(playerData, setPlayerData, 'blacksmith', notify);
+                    }}
+                />
+            )}
+
+            {buildings.store && <Store />}
+
+            {!buildings.store && (
+                <Button
+                    text={'Build a store (50 Stone, 10 iron bars, 25 glass)'}
+                    disabled={CHECK_DISABLED(playerData, BUILDINGS.store.cost)}
+                    onClick={() => {
+                        BUILD_BUILDING(playerData, setPlayerData, 'store', notify);
+                    }}
+                />
+            )}
+
+            {buildings.recruiter && <Recruiter />}
+
+            {!buildings.recruiter && (
+                <Button
+                    text={'Build a recruiter (50 Stone, 10 steel bars, 50 glass, 10 gold bars)'}
+                    disabled={CHECK_DISABLED(playerData, BUILDINGS.recruiter.cost)}
+                    onClick={() => {
+                        BUILD_BUILDING(playerData, setPlayerData, 'recruiter', notify);
                     }}
                 />
             )}

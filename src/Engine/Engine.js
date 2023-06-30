@@ -1,54 +1,61 @@
-// prettier-ignore
+// This is the pickaxes array. It is used to store all the data about the pickaxes.
 const PICKAXES = [
-  { name: 'Wooden pickaxe', cost: {}, speed: 25, digDepth: 2, reqDepth: 0 },
-  { name: 'Stone pickaxe', cost: {stone:10}, speed: 35, digDepth: 10, reqDepth: 5 },
-  { name: 'Iron pickaxe', cost: {ironBar:10}, speed: 45, digDepth: 15, reqDepth: 10 },
-  { name: 'Steel pickaxe', cost: {}, speed: 55, digDepth: 20, reqDepth: 15 },
-  { name: 'Diamond pickaxe', cost: {}, speed: 65, digDepth: 30, reqDepth: 25 },
-  { name: 'Mithril pickaxe', cost: {}, speed: 70, digDepth: 50, reqDepth: 30 },
-  { name: 'Adamantite pickaxe', cost: {}, speed: 80, digDepth: 90, reqDepth: 50 },
-  { name: 'Crystal pickaxe', cost: {}, speed: 90, digDepth: 125, reqDepth: 90 },
-  { name: 'Infernal pickaxe', cost: {}, speed: 101, digDepth: 300, reqDepth: 125 },
+    { name: 'Wooden pickaxe', cost: {}, speed: 25, digDepth: 2, reqDepth: 0 },
+    { name: 'Stone pickaxe', cost: { stone: 10 }, speed: 35, digDepth: 10, reqDepth: 5 },
+    { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, speed: 45, digDepth: 15, reqDepth: 10 },
+    { name: 'Steel pickaxe', cost: {}, speed: 55, digDepth: 20, reqDepth: 15 },
+    { name: 'Diamond pickaxe', cost: {}, speed: 65, digDepth: 30, reqDepth: 25 },
+    { name: 'Mithril pickaxe', cost: {}, speed: 70, digDepth: 50, reqDepth: 30 },
+    { name: 'Adamantite pickaxe', cost: {}, speed: 80, digDepth: 90, reqDepth: 50 },
+    { name: 'Crystal pickaxe', cost: {}, speed: 90, digDepth: 125, reqDepth: 90 },
+    { name: 'Infernal pickaxe', cost: {}, speed: 101, digDepth: 300, reqDepth: 125 },
 ];
 
-// prettier-ignore
+// This is the buildings object. It is used to store all the data about the buildings.
 const BUILDINGS = {
-  blacksmith: {},
-  storeFront: {},
+    blacksmith: { cost: { sand: 25, stone: 10, coal: 5 } },
+    store: { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
+    recruiter: { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
 };
 
-// prettier-ignore
+// This is the resources object. It is used to store all the data about the resources.
 const RESOURCES = {
-    dig:{
-    sand: { name: 'sand', value: 1, depth: 1, stopDepth: 15, rarity: 5},
-    stone: { name: 'stone', value: 10, depth: 1, stopDepth: 0, rarity: 10},
-    coal: { name: 'coal', value: 200, depth: 2, stopDepth: 300, rarity: 15},
-    iron: { name: 'iron', value: 500, depth: 3, stopDepth: 0, rarity: 25},
-    gold: { name: 'gold', value: 5000, depth: 300, stopDepth: 700, rarity: 40},
-    diamond: { name: 'diamond', value: 100000, depth: 500, stopDepth: 0, rarity: 50},
+    dig: {
+        sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
+        stone: { name: 'stone', value: 10, depth: 1, stopDepth: 0, rarity: 10 },
+        tin: { name: 'tin', value: 10, depth: 3, stopDepth: 0, rarity: 10 },
+        copper: { name: 'copper', value: 10, depth: 3, stopDepth: 0, rarity: 10 },
+        coal: { name: 'coal', value: 200, depth: 2, stopDepth: 300, rarity: 15 },
+        iron: { name: 'iron', value: 500, depth: 3, stopDepth: 0, rarity: 20 },
+        gold: { name: 'gold', value: 5000, depth: 300, stopDepth: 700, rarity: 40 },
+        diamond: { name: 'diamond', value: 100000, depth: 500, stopDepth: 0, rarity: 50 },
     },
-    craft:{
-    ironBar: { name: 'iron bar', value: 1000, cost: {iron: 1, coal: 2}},
+    craft: {
+        glass: { name: 'glass', value: 10, cost: { sand: 1 } },
+        'bronze bar': { name: 'bronze bar', value: 100, cost: { copper: 1, tin: 1 } },
+        'copper bar': { name: 'copper bar', value: 200, cost: { copper: 5, coal: 2 } },
+        'iron bar': { name: 'iron bar', value: 500, cost: { iron: 2 } },
+        'steel bar': { name: 'steel bar', value: 1000, cost: { iron: 5, coal: 2 } },        
+        'gold bar': { name: 'gold bar', value: 10000, cost: { gold: 1, coal: 2 } },
     },
 };
 
-// prettier-ignore
+// This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-  wallet: 0,
-  pickaxe: 0,
-  currentDepth: 1,
-  maxDepth: 1,
-  depthProgress: {
-    realDigCount: 0,
-    digCount: 0,
-    unlockChance: 0,
-  },
-  buffs: {},
-  nerfs: {},
-  resources: {},
-  buildings: {},
+    wallet: 0,
+    pickaxe: 0,
+    currentDepth: 1,
+    maxDepth: 1,
+    depthProgress: {
+        realDigCount: 0,
+        digCount: 0,
+        unlockChance: 0,
+    },
+    buffs: {},
+    nerfs: {},
+    resources: {},
+    buildings: {},
 };
-
 
 const DIGGING = (depth, playerData, setPlayerData, notify) => {
     // Filter and map resources into potential resources array.
@@ -111,6 +118,7 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
             }
         }
 
+        // Update depth progress
         updatedDepthProgress = {
             ...playerData.depthProgress,
             digCount: digcount,
@@ -128,11 +136,13 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
 };
 
 const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
+    // Get next pickaxe in the list
     const nextPickaxe = PICKAXES[playerData.pickaxe + 1];
     const cost = nextPickaxe.cost;
     const currentResources = playerData.resources;
     let resourceCheck = true;
 
+    // Check if player has enough resources for the upgrade
     Object.entries(cost).forEach(([resource, amount]) => {
         if (currentResources[resource] < amount || !currentResources[resource]) {
             notify(`You don't have enough ${resource} to upgrade your pickaxe.`, 'error');
@@ -144,64 +154,84 @@ const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
         currentResources[resource] -= amount;
     });
 
+    // If player has enough resources, upgrade pickaxe and update resources
     if (resourceCheck) {
         setPlayerData({ ...playerData, pickaxe: playerData.pickaxe + 1, resources: currentResources });
     }
 };
 
-const SMITH_BARS = (bar, resources) => {};
+//WIP
+const SMITH_BARS = (bar, playerData, setPlayerData, notify) => {
+    const cost = RESOURCES.craft[bar].cost;
+    const currentResources = playerData.resources;
+    let resourceCheck = true;
 
-const CHANGE_DEPTH = (currentDepth, direction, depthUnlocks) => {};
-
-const HIRE_MINER = (currentMiners, resources, depthUnlocks) => {};
-
-const UPGRADE_MINER = (currentMiners, resources) => {};
-
-const SELL_RESOURCE = (resource) => {};
-
-const CHECK_DISABLED = (playerData, building) => {
-    switch (building) {
-        case 'blacksmith':
-            if (!playerData.resources.sand || !playerData.resources.stone || !playerData.resources.coal) {
-                return true;
+    Object.entries(cost).forEach(([resource, amount]) => {
+        if (currentResources[resource] < amount || !currentResources[resource]) {
+            notify(`You don't have enough ${resource} to craft ${bar}.`, 'error');
+            if (resourceCheck) {
+                resourceCheck = false;
             }
-            if (playerData.resources.sand < 25 || playerData.resources.stone < 10 || playerData.resources.coal < 5) {
-                return true;
-            }
-            return false;
+            return;
+        }
+        currentResources[resource] -= amount;
+    });
 
-        default:
-            return true;
+    if (resourceCheck) {
+        currentResources[bar] = currentResources[bar] ? currentResources[bar] + 1 : 1;
+        notify(`You crafted a ${bar}.`, 'success');
+        setPlayerData({ ...playerData, resources: currentResources });
     }
 };
 
-const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
-    switch (building) {
-        case 'blacksmith':
-            if (!playerData.resources.sand || !playerData.resources.stone || !playerData.resources.coal) {
-                return;
-            }
-            if (playerData.resources.sand < 25 || playerData.resources.stone < 10 || playerData.resources.coal < 5) {
-                return;
-            }
-            setPlayerData({
-                ...playerData,
-                resources: {
-                    ...playerData.resources,
-                    sand: playerData.resources.sand - 25,
-                    stone: playerData.resources.stone - 10,
-                    coal: playerData.resources.coal - 5,
-                },
-                buildings: {
-                    ...playerData.buildings,
-                    blacksmith: true,
-                },
-            });
-            notify('Blacksmith built', 'success');
-            return;
+//WIP
+const CHANGE_DEPTH = (currentDepth, direction, depthUnlocks) => {};
 
-        default:
+//WIP
+const HIRE_MINER = (currentMiners, resources, depthUnlocks) => {};
+
+//WIP
+const UPGRADE_MINER = (currentMiners, resources) => {};
+
+//WIP
+const SELL_RESOURCE = (resource) => {};
+
+// Function to check if the player has enough resources for a specific cost. Disable button if true.
+const CHECK_DISABLED = (playerData, cost) => {
+    let disabled = false;
+    Object.entries(cost).forEach(([resource, amount]) => {
+        if (disabled) return;
+
+        if (playerData.resources[resource] < amount || !playerData.resources[resource]) {
+            disabled = true;
             return;
+        }
+    });
+
+    return disabled;
+};
+
+const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
+    const cost = BUILDINGS[building].cost;
+    const currentResources = playerData.resources;
+    const currentBuildings = playerData.buildings;
+    let resourceCheck = true;
+
+    Object.entries(cost).forEach(([resource, amount]) => {
+        if (currentResources[resource] < amount || !currentResources[resource]) {
+            notify(`You don't have enough ${resource} to build ${building}.`, 'error');
+            if (resourceCheck) {
+                resourceCheck = false;
+            }
+            return;
+        }
+        currentResources[resource] -= amount;
+    });
+
+    if (resourceCheck) {
+        currentBuildings[building] = true;
+        notify(`You built a ${building}.`, 'success');
+        setPlayerData({ ...playerData, buildings: currentBuildings, resources: currentResources });
     }
 };
 

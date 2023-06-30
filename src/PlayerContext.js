@@ -1,7 +1,7 @@
 import { useState, createContext, useEffect } from 'react';
 import ls from 'localstorage-slim';
-import { PLAYER, DIGGING, CHECK_DISABLED, BUILD_BUILDING, PICKAXES } from './Engine/Engine.js';
-import usePersistedState from './usePersistedState';
+import { PLAYER, DIGGING, CHECK_DISABLED, BUILD_BUILDING, PICKAXES, BUILDINGS } from './Engine/Engine.js';
+//import usePersistedState from './usePersistedState';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -48,14 +48,15 @@ export const ContextProvider = ({ children }) => {
                 setCurrentProgress,
                 CHECK_DISABLED,
                 BUILD_BUILDING,
+                BUILDINGS,
                 PICKAXES,
                 notify
             }}
         >
             {children}
             <ToastContainer 
-            position="bottom-center"
-            autoClose={5000}
+            position="top-right"
+            autoClose={1000}
             hideProgressBar={true}
             newestOnTop={false}
             closeOnClick
