@@ -4,19 +4,19 @@ import { PLAYER, DIGGING, CHECK_DISABLED, BUILD_BUILDING, PICKAXES, BUILDINGS, A
 import usePersistedState from './usePersistedState';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useInterval from "./use-interval.hook";
+import useInterval from './use-interval.hook';
 
 export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
     //FOR PRODUCTION
-   // const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
+    // const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
     //FOR TESTING
     const [playerData, setPlayerData] = useState(PLAYER);
     const [currentProgress, setCurrentProgress] = useState(0);
 
-    const notify = (message='', type='') => {
-        switch(type) {
+    const notify = (message = '', type = '') => {
+        switch (type) {
             case 'success':
                 toast.success(message);
                 break;
@@ -35,12 +35,11 @@ export const ContextProvider = ({ children }) => {
         }
     };
 
-
-        useInterval(() => {
-            if(playerData.miners.qty > 0){
-                AUTO_DIGGING(playerData, setPlayerData);
-            }
-        }, 1000);
+    useInterval(() => {
+        if (playerData.miners.qty > 0) {
+            AUTO_DIGGING(playerData, setPlayerData);
+        }
+    }, 1000);
 
     useEffect(() => {
         ls.set('MDPData', JSON.stringify(playerData), { isJSON: true, encrypt: true });
@@ -58,21 +57,21 @@ export const ContextProvider = ({ children }) => {
                 BUILD_BUILDING,
                 BUILDINGS,
                 PICKAXES,
-                notify
+                notify,
             }}
         >
             {children}
-            <ToastContainer 
-            position="top-right"
-            autoClose={1000}
-            hideProgressBar={true}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
+            <ToastContainer
+                position="top-right"
+                autoClose={1000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
             />
         </playerContext.Provider>
     );

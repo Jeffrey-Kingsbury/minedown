@@ -3,7 +3,7 @@ const PICKAXES = [
     { name: 'Wooden pickaxe', cost: {}, speed: 25, digDepth: 2, reqDepth: 0 },
     { name: 'Stone pickaxe', cost: { stone: 10 }, speed: 35, digDepth: 10, reqDepth: 5 },
     { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, speed: 45, digDepth: 15, reqDepth: 10 },
-    { name: 'Steel pickaxe', cost: {}, speed: 55, digDepth: 20, reqDepth: 15 },
+    { name: 'Steel pickaxe', cost: { 'steel bar': 5}, speed: 55, digDepth: 20, reqDepth: 15 },
     { name: 'Diamond pickaxe', cost: {}, speed: 65, digDepth: 30, reqDepth: 25 },
     { name: 'Mithril pickaxe', cost: {}, speed: 70, digDepth: 50, reqDepth: 30 },
     { name: 'Adamantite pickaxe', cost: {}, speed: 80, digDepth: 90, reqDepth: 50 },
@@ -23,11 +23,11 @@ const RESOURCES = {
     dig: {
         sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
         stone: { name: 'stone', value: 10, depth: 1, stopDepth: 0, rarity: 10 },
-        tin: { name: 'tin', value: 10, depth: 3, stopDepth: 0, rarity: 10 },
-        copper: { name: 'copper', value: 10, depth: 3, stopDepth: 0, rarity: 10 },
+        tin: { name: 'tin', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
+        copper: { name: 'copper', value: 10, depth: 6, stopDepth: 0, rarity: 10 },
         coal: { name: 'coal', value: 200, depth: 2, stopDepth: 300, rarity: 15 },
         iron: { name: 'iron', value: 500, depth: 3, stopDepth: 0, rarity: 20 },
-        gold: { name: 'gold', value: 5000, depth: 300, stopDepth: 700, rarity: 40 },
+        gold: { name: 'gold', value: 5000, depth: 10, stopDepth: 700, rarity: 40 },
         diamond: { name: 'diamond', value: 100000, depth: 500, stopDepth: 0, rarity: 50 },
     },
     craft: {
