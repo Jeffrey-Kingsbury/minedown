@@ -35,14 +35,14 @@ const RESOURCES = {
         'bronze bar': { name: 'bronze bar', value: 100, cost: { copper: 1, tin: 1 } },
         'copper bar': { name: 'copper bar', value: 200, cost: { copper: 5, coal: 2 } },
         'iron bar': { name: 'iron bar', value: 500, cost: { iron: 2 } },
-        'steel bar': { name: 'steel bar', value: 1000, cost: { iron: 5, coal: 2 } },        
+        'steel bar': { name: 'steel bar', value: 1000, cost: { iron: 5, coal: 2 } },
         'gold bar': { name: 'gold bar', value: 10000, cost: { gold: 1, coal: 2 } },
     },
 };
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-    wallet: 0,
+    wallet: 10000000,
     pickaxe: 0,
     currentDepth: 1,
     maxDepth: 1,
@@ -55,6 +55,12 @@ const PLAYER = {
     nerfs: {},
     resources: {},
     buildings: {},
+    miners: {
+        qty: 0,
+        gains: 1,
+        depth: 1,
+        upgrades: {},
+    },
 };
 
 const DIGGING = (depth, playerData, setPlayerData, notify) => {
@@ -135,6 +141,48 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
     });
 };
 
+const AUTO_DIGGING = (playerData, setPlayerData) => {
+    let gains = 1;
+    const updatedResources = { ...playerData.resources };
+    const depth = playerData.miners.depth;
+    const minerQty = playerData.miners.qty;
+    const minerUpgrades = playerData.miners.upgrades;
+    const potentialResources = Object.values(RESOURCES.dig)
+        .filter((resource) => resource.depth <= depth && (resource.stopDepth >= depth || resource.stopDepth === 0))
+        .map((resource) => ({
+            ...resource,
+            effectiveness: (1 / resource.rarity) * Math.log(depth / resource.depth + 1),
+        }));
+
+    // Calculate the total effectiveness of all potential resources.
+    const totalEffectiveness = potentialResources.reduce((sum, resource) => sum + resource.effectiveness, 0);
+
+    // Function to pick a resource randomly, with weighting based on their effectiveness.
+    const randomResource = () => {
+        const randomNum = Math.random() * totalEffectiveness;
+        let currentEffectiveness = 0;
+
+        for (let resource of potentialResources) {
+            currentEffectiveness += resource.effectiveness;
+            if (randomNum < currentEffectiveness) {
+                return resource;
+            }
+        }
+    };
+
+    for (let x = 0; x < minerQty; x++) {
+        const gainedResource = randomResource();
+        updatedResources[gainedResource.name] = updatedResources[gainedResource.name]
+            ? updatedResources[gainedResource.name] + gains
+            : 1;
+    }
+
+    setPlayerData({
+        ...playerData,
+        resources: updatedResources,
+    });
+};
+
 const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
     // Get next pickaxe in the list
     const nextPickaxe = PICKAXES[playerData.pickaxe + 1];
@@ -179,16 +227,28 @@ const SMITH_BARS = (bar, playerData, setPlayerData, notify) => {
 
     if (resourceCheck) {
         currentResources[bar] = currentResources[bar] ? currentResources[bar] + 1 : 1;
-        notify(`You crafted a ${bar}.`, 'success');
         setPlayerData({ ...playerData, resources: currentResources });
     }
 };
 
-//WIP
-const CHANGE_DEPTH = (currentDepth, direction, depthUnlocks) => {};
+// Function to change the player's current depth. 
+const CHANGE_DEPTH = (playerData, setPlayerData, diff) => {
+    const newDepth = playerData.currentDepth + diff;
+    if (newDepth < 1 || newDepth > playerData.maxDepth) return;
+    setPlayerData({ ...playerData, currentDepth: newDepth });
+};
 
 //WIP
-const HIRE_MINER = (currentMiners, resources, depthUnlocks) => {};
+const HIRE_MINER = (playerData, setPlayerData, price) => {
+    setPlayerData({
+        ...playerData,
+        miners: {
+            ...playerData.miners,
+            qty: playerData.miners.qty + 1,
+        },
+        wallet: playerData.wallet - price,
+    });
+};
 
 //WIP
 const UPGRADE_MINER = (currentMiners, resources) => {};
@@ -241,6 +301,7 @@ export {
     BUILDINGS,
     RESOURCES,
     DIGGING,
+    AUTO_DIGGING,
     UPGRADE_PICKAXE,
     SMITH_BARS,
     CHANGE_DEPTH,

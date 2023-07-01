@@ -12,7 +12,6 @@ function App() {
 const Wrapper = styled.div`
     height: 100dvh;
     width: 100dvw;
-    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
