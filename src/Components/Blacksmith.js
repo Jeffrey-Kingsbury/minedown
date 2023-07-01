@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import Button from './Button';
 import Container from './Container';
 import { playerContext } from '../PlayerContext';
-import { PICKAXES, UPGRADE_PICKAXE, SMITH_BARS, CHECK_DISABLED, RESOURCES } from '../Engine/Engine';
+import { PICKAXES, UPGRADE_PICKAXE, CRAFT_ITEM, CHECK_DISABLED, RESOURCES } from '../Engine/Engine';
 
 const Blacksmith = () => {
     const { playerData, setPlayerData, notify } = useContext(playerContext);
@@ -44,7 +44,7 @@ const Blacksmith = () => {
 {Object.entries(RESOURCES.craft).map(([bar, craft]) => {
     // Check if the player has seen the required resource(s)
     const hasPlayerSeenResources = Object.keys(craft.cost).every(
-        (resource) => playerData.resources[resource] >= 0
+        (resource) => playerData.resources[resource] != null
     );
 
     // If player has seen the required resource(s) before, render the craft button
@@ -54,7 +54,7 @@ const Blacksmith = () => {
             <Button
                 key={bar}
                 text={`Smith ${bar} (${barCostString(bar)})`}
-                onClick={() => {SMITH_BARS(bar, playerData, setPlayerData, notify);}} // Call Smith bars function on click
+                onClick={() => {CRAFT_ITEM(bar, playerData, setPlayerData, notify);}} // Call Smith bars function on click
                 disabled={CHECK_DISABLED(playerData, craft.cost)} // Disable the button if the bar is not affordable
             />
         );

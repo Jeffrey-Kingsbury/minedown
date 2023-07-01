@@ -13,8 +13,7 @@ const ProgressBar = ({ currentProgress = 0 }) => {
 const Wrapper = styled.div`
     width: 100%;
     max-width: 600px;
-    padding: 0 1rem;
-    margin: 1rem 1rem 0 1rem;
+
 `;
 const Outer = styled.div`
     width: 100%;

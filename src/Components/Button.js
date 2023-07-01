@@ -11,6 +11,7 @@ const Button = ({ text='STR MISSING', onClick=()=>{return}, disabled=false }) =>
 
 const Wrapper = styled.button`
     min-height: 30px;
+    max-height: 50px;
     padding: 0 1rem;
     margin: .25rem 1rem;
     border: 1px solid black;

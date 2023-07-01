@@ -1,14 +1,14 @@
 // This is the pickaxes array. It is used to store all the data about the pickaxes.
 const PICKAXES = [
-    { name: 'Wooden pickaxe', cost: {}, speed: 25, digDepth: 2, reqDepth: 0 },
-    { name: 'Stone pickaxe', cost: { stone: 10 }, speed: 35, digDepth: 10, reqDepth: 5 },
-    { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, speed: 45, digDepth: 15, reqDepth: 10 },
-    { name: 'Steel pickaxe', cost: { 'steel bar': 5}, speed: 55, digDepth: 20, reqDepth: 15 },
-    { name: 'Diamond pickaxe', cost: {}, speed: 65, digDepth: 30, reqDepth: 25 },
-    { name: 'Mithril pickaxe', cost: {}, speed: 70, digDepth: 50, reqDepth: 30 },
-    { name: 'Adamantite pickaxe', cost: {}, speed: 80, digDepth: 90, reqDepth: 50 },
-    { name: 'Crystal pickaxe', cost: {}, speed: 90, digDepth: 125, reqDepth: 90 },
-    { name: 'Infernal pickaxe', cost: {}, speed: 101, digDepth: 300, reqDepth: 125 },
+    { name: 'Wooden pickaxe', cost: {}, digDepth: 2, reqDepth: 0 },
+    { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5 },
+    { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10 },
+    { name: 'Steel pickaxe', cost: { 'steel bar': 5}, digDepth: 20, reqDepth: 15 },
+    { name: 'Diamond pickaxe', cost: {}, digDepth: 30, reqDepth: 25 },
+    { name: 'Mithril pickaxe', cost: {}, digDepth: 50, reqDepth: 30 },
+    { name: 'Adamantite pickaxe', cost: {}, digDepth: 90, reqDepth: 50 },
+    { name: 'Crystal pickaxe', cost: {}, digDepth: 125, reqDepth: 90 },
+    { name: 'Infernal pickaxe', cost: {}, digDepth: 300, reqDepth: 125 },
 ];
 
 // This is the buildings object. It is used to store all the data about the buildings.
@@ -22,16 +22,21 @@ const BUILDINGS = {
 const RESOURCES = {
     dig: {
         sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
-        stone: { name: 'stone', value: 10, depth: 1, stopDepth: 0, rarity: 10 },
-        tin: { name: 'tin', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
-        copper: { name: 'copper', value: 10, depth: 6, stopDepth: 0, rarity: 10 },
-        coal: { name: 'coal', value: 200, depth: 2, stopDepth: 300, rarity: 15 },
-        iron: { name: 'iron', value: 500, depth: 3, stopDepth: 0, rarity: 20 },
-        gold: { name: 'gold', value: 5000, depth: 10, stopDepth: 700, rarity: 40 },
-        diamond: { name: 'diamond', value: 100000, depth: 500, stopDepth: 0, rarity: 50 },
+        clay: { name: 'clay', value: 1, depth: 2, stopDepth: 2, rarity: 5 },
+        stone: { name: 'stone', value: 10, depth: 2, stopDepth: 0, rarity: 10 },
+        tin: { name: 'tin', value: 10, depth: 2, stopDepth: 0, rarity: 10 },
+        copper: { name: 'copper', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
+        coal: { name: 'coal', value: 200, depth: 6, stopDepth: 300, rarity: 15 },
+        iron: { name: 'iron', value: 500, depth: 7, stopDepth: 0, rarity: 20 },
+        gold: { name: 'gold', value: 5000, depth: 8, stopDepth: 700, rarity: 40 },
+        mithril: { name: 'mithril', value: 5000, depth: 9, stopDepth: 700, rarity: 40 },
+        adamantite: { name: 'adamantite', value: 5000, depth: 2, stopDepth: 700, rarity: 40 },
+        diamond: { name: 'diamond', value: 100000, depth: 2, stopDepth: 0, rarity: 50 },
+        
     },
     craft: {
         glass: { name: 'glass', value: 10, cost: { sand: 1 } },
+        brick: { name: 'brick', value: 10, cost: { clay: 1, sand: 1 } },
         'bronze bar': { name: 'bronze bar', value: 100, cost: { copper: 1, tin: 1 } },
         'copper bar': { name: 'copper bar', value: 200, cost: { copper: 5, coal: 2 } },
         'iron bar': { name: 'iron bar', value: 500, cost: { iron: 2 } },
@@ -46,6 +51,7 @@ const PLAYER = {
     pickaxe: 0,
     currentDepth: 1,
     maxDepth: 1,
+    digSpeed: 34,
     depthProgress: {
         realDigCount: 0,
         digCount: 0,
@@ -54,6 +60,7 @@ const PLAYER = {
     buffs: {},
     nerfs: {},
     resources: {},
+    craftables: {},
     buildings: {},
     miners: {
         qty: 0,
@@ -62,6 +69,17 @@ const PLAYER = {
         upgrades: {},
     },
 };
+
+//Populate the player data object with the resources and craftables.
+Object.keys(RESOURCES.dig).forEach((resource) => {
+    if(PLAYER.resources[resource]) return;
+    PLAYER.resources[resource] = null;
+});
+
+Object.keys(RESOURCES.craft).forEach((resource) => {
+    if(PLAYER.craftables[resource]) return;
+    PLAYER.craftables[resource] = null;
+});
 
 const DIGGING = (depth, playerData, setPlayerData, notify) => {
     // Filter and map resources into potential resources array.
@@ -144,7 +162,7 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
 const AUTO_DIGGING = (playerData, setPlayerData) => {
     let gains = 1;
     const updatedResources = { ...playerData.resources };
-    const depth = playerData.miners.depth;
+    const depth = playerData.maxDepth;
     const minerQty = playerData.miners.qty;
     const minerUpgrades = playerData.miners.upgrades;
     const potentialResources = Object.values(RESOURCES.dig)
@@ -208,10 +226,11 @@ const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
     }
 };
 
-//WIP
-const SMITH_BARS = (bar, playerData, setPlayerData, notify) => {
+// Function to craft an item
+const CRAFT_ITEM = (bar, playerData, setPlayerData, notify) => {
     const cost = RESOURCES.craft[bar].cost;
     const currentResources = playerData.resources;
+    const currentCraftables = playerData.craftables;
     let resourceCheck = true;
 
     Object.entries(cost).forEach(([resource, amount]) => {
@@ -226,8 +245,8 @@ const SMITH_BARS = (bar, playerData, setPlayerData, notify) => {
     });
 
     if (resourceCheck) {
-        currentResources[bar] = currentResources[bar] ? currentResources[bar] + 1 : 1;
-        setPlayerData({ ...playerData, resources: currentResources });
+        currentCraftables[bar] = currentCraftables[bar] ? currentCraftables[bar] + 1 : 1;
+        setPlayerData({ ...playerData, craftables: currentCraftables, resources: currentResources });
     }
 };
 
@@ -298,17 +317,25 @@ const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
 const COLOR_PICKER = (name) => {
     switch (name) {
         case 'sand':
-            return 'darkgoldenrod';
+            return '#e8cb4a';
         case 'stone':
-            return 'grey';
+            return '#707070';
         case 'coal':
             return 'black';
         case 'iron':
-            return 'grey';
+            return '#404040';
         case 'gold':
-            return 'orange';
+            return '#d9b514';
         case 'diamond':
-            return 'blue';
+            return '#609bd1';
+        case 'tin':
+            return '#b7babd';
+        case 'copper':
+            return '#bf5306';
+        case 'mithril':
+            return '#00396e';
+        case 'adamantite':
+            return '#0e5227';
         default:
             return 'black';
     }
@@ -323,7 +350,7 @@ export {
     DIGGING,
     AUTO_DIGGING,
     UPGRADE_PICKAXE,
-    SMITH_BARS,
+    CRAFT_ITEM,
     CHANGE_DEPTH,
     HIRE_MINER,
     UPGRADE_MINER,

@@ -1,62 +1,30 @@
 import { styled } from 'styled-components';
 import { useContext } from 'react';
 import { playerContext } from '../PlayerContext';
-import ProgressBar from './ProgressBar';
 import Blacksmith from './Blacksmith';
 import Button from './Button';
-import Container from './Container';
 import Store from './Store';
 import Recruiter from './Recruiter';
 import PlayerData from './PlayerData';
+import Resources from './Resources';
+import Dig from './Dig';
 
 const GameArea = () => {
-    const {
-        playerData,
-        setPlayerData,
-        DIGGING,
-        currentProgress,
-        setCurrentProgress,
-        CHECK_DISABLED,
-        BUILD_BUILDING,
-        BUILDINGS,
-        PICKAXES,
-        notify,
-    } = useContext(playerContext);
-    const { currentDepth, resources, buildings } = playerData;
-
-    const digSpeed = PICKAXES[playerData.pickaxe].speed;
+    const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
+    const { buildings } = playerData;
 
     return (
         <Wrapper>
-            <ProgressBar currentProgress={currentProgress} />
-            <Button
-                text={'Dig'}
-                onClick={() => {
-                    if (currentProgress + digSpeed <= 100) {
-                        setCurrentProgress(currentProgress + digSpeed);
-                    } else {
-                        setCurrentProgress(0);
-                        DIGGING(currentDepth, playerData, setPlayerData, notify);
-                    }
-                }}
-            />
+            <Dig />
 
             <PlayerData />
 
-            <Container title={'resources'}>
-                {Object.keys(resources).map((resource) => {
-                    return (
-                        <p key={resource}>
-                            {resource}: {resources[resource]}
-                        </p>
-                    );
-                })}
-            </Container>
+            <Resources />
 
-            {buildings.blacksmith && <Blacksmith />}
-            {buildings.store && <Store />}
-            {buildings.recruiter && <Recruiter />}
-            
+            {!buildings.blacksmith && <Blacksmith />}
+            {!buildings.store && <Store />}
+            {!buildings.recruiter && <Recruiter />}
+
             {!buildings.blacksmith && (
                 <Button
                     text={'Build Blacksmith (25 Sand, 10 Stone, 5 Coal)'}
@@ -86,7 +54,6 @@ const GameArea = () => {
                     }}
                 />
             )}
-
         </Wrapper>
     );
 };
