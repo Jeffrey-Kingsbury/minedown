@@ -295,6 +295,26 @@ const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
     }
 };
 
+const COLOR_PICKER = (name) => {
+    switch (name) {
+        case 'sand':
+            return 'darkgoldenrod';
+        case 'stone':
+            return 'grey';
+        case 'coal':
+            return 'black';
+        case 'iron':
+            return 'grey';
+        case 'gold':
+            return 'orange';
+        case 'diamond':
+            return 'blue';
+        default:
+            return 'black';
+    }
+};
+
+
 export {
     PLAYER,
     PICKAXES,
@@ -310,4 +330,5 @@ export {
     SELL_RESOURCE,
     CHECK_DISABLED,
     BUILD_BUILDING,
+    COLOR_PICKER,
 };

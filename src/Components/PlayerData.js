@@ -1,7 +1,7 @@
 import Container from './Container';
 import { useContext } from 'react';
 import { playerContext } from '../PlayerContext';
-import { CHANGE_DEPTH, PICKAXES, RESOURCES } from '../Engine/Engine';
+import { CHANGE_DEPTH, PICKAXES, RESOURCES, COLOR_PICKER } from '../Engine/Engine';
 import Button from './Button';
 const PlayerData = () => {
     const { playerData, setPlayerData } = useContext(playerContext);
@@ -20,16 +20,16 @@ const PlayerData = () => {
             <p>Pickaxe: {pickaxeData.name}</p>
             <p>Pickaxe Max Depth: {pickaxeData.digDepth}</p>
             <p>Current Depth: {currentDepth}</p>
-            <p>
+            <span>
                 Resources at current depth:{' '}
                 {resourcesAtDepth().map((e, i) => {
                     if (i === resourcesAtDepth().length - 1) {
-                        return `${e.name} `;
+                        return <p key={e.name} style={{ display: 'inline', color: COLOR_PICKER(e.name) }}>{e.name}</p>;
                     } else {
-                        return `${e.name}, `;
+                        return <span key={e.name}><p style={{ display: 'inline', color: COLOR_PICKER(e.name) }}>{e.name}</p>, </span>;
                     }
                 })}
-            </p>
+            </span>
             <p>Max Depth: {maxDepth}</p>
             <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
             <p>
