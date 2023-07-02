@@ -1,6 +1,6 @@
 // This is the pickaxes array. It is used to store all the data about the pickaxes.
 const PICKAXES = [
-    { name: 'Wooden pickaxe', cost: {}, digDepth: 2, reqDepth: 0 },
+    { name: 'Wooden pickaxe', cost: {}, digDepth: 3, reqDepth: 0 },
     { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5 },
     { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10 },
     { name: 'Steel pickaxe', cost: { 'steel bar': 5}, digDepth: 20, reqDepth: 15 },
@@ -22,16 +22,16 @@ const BUILDINGS = {
 const RESOURCES = {
     dig: {
         sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
-        clay: { name: 'clay', value: 1, depth: 2, stopDepth: 2, rarity: 5 },
+        clay: { name: 'clay', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
         stone: { name: 'stone', value: 10, depth: 2, stopDepth: 0, rarity: 10 },
-        tin: { name: 'tin', value: 10, depth: 2, stopDepth: 0, rarity: 10 },
+        coal: { name: 'coal', value: 200, depth: 3, stopDepth: 300, rarity: 15 },
+        tin: { name: 'tin', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
         copper: { name: 'copper', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
-        coal: { name: 'coal', value: 200, depth: 6, stopDepth: 300, rarity: 15 },
-        iron: { name: 'iron', value: 500, depth: 7, stopDepth: 0, rarity: 20 },
-        gold: { name: 'gold', value: 5000, depth: 8, stopDepth: 700, rarity: 40 },
-        mithril: { name: 'mithril', value: 5000, depth: 9, stopDepth: 700, rarity: 40 },
-        adamantite: { name: 'adamantite', value: 5000, depth: 2, stopDepth: 700, rarity: 40 },
-        diamond: { name: 'diamond', value: 100000, depth: 2, stopDepth: 0, rarity: 50 },
+        iron: { name: 'iron', value: 500, depth: 9, stopDepth: 0, rarity: 20 },
+        gold: { name: 'gold', value: 5000, depth: 11, stopDepth: 700, rarity: 40 },
+        mithril: { name: 'mithril', value: 5000, depth: 15, stopDepth: 700, rarity: 40 },
+        adamantite: { name: 'adamantite', value: 5000, depth: 25, stopDepth: 700, rarity: 40 },
+        diamond: { name: 'diamond', value: 100000, depth: 30, stopDepth: 0, rarity: 50 },
         
     },
     craft: {
