@@ -22,7 +22,7 @@ const GameArea = () => {
             <Resources />
 
             {buildings.blacksmith && <Blacksmith />}
-            {!buildings.store && <Store />}
+            {buildings.store && <Store />}
             {buildings.recruiter && <Recruiter />}
 
             {!buildings.blacksmith && (

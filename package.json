@@ -1,6 +1,6 @@
 {
   "name": "minedown",
-  "homepage": "https://jeffrey-kingsbury.github.io/minedown/",
+  "homepage": "https://minedown.gamesasdesigned.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,7 +17,8 @@
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "gh-pages": "^5.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
