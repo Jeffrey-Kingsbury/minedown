@@ -52,6 +52,7 @@ const PLAYER = {
     currentDepth: 1,
     maxDepth: 1,
     digSpeed: 34,
+    totalDigs: 0,
     depthProgress: {
         realDigCount: 0,
         digCount: 0,
@@ -137,6 +138,7 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
                     depthProgress: updatedDepthProgress,
                     maxDepth: playerData.maxDepth + 1,
                     currentDepth: playerData.currentDepth + 1,
+                    totalDigs: playerData.totalDigs + 1,
                 });
                 return;
             }
@@ -276,6 +278,7 @@ const UPGRADE_MINER = (currentMiners, resources) => {};
 const SELL_RESOURCE = (resource) => {};
 
 // Function to check if the player has enough resources for a specific cost. Disable button if true.
+//WIP{}
 const CHECK_DISABLED = (playerData, cost) => {
     let disabled = false;
     Object.entries(cost).forEach(([resource, amount]) => {
@@ -341,6 +344,19 @@ const COLOR_PICKER = (name) => {
     }
 };
 
+const PLAYER_UPGRADES = {
+    speed1: {
+        name: 'Speed up',
+        description: 'Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
+        unlockRequirement: {
+            totalDigs: 100
+        },
+        upgradeFunction: (playerData, setPlayerData) => {
+            if(playerData.digSpeed >= 51) return;
+            setPlayerData({ ...playerData, digSpeed: 51 });
+        },
+    }
+};
 
 export {
     PLAYER,
@@ -358,4 +374,5 @@ export {
     CHECK_DISABLED,
     BUILD_BUILDING,
     COLOR_PICKER,
+    PLAYER_UPGRADES,
 };

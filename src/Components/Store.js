@@ -3,6 +3,7 @@ import Button from './Button';
 import Container from './Container';
 import { playerContext } from '../PlayerContext';
 import { styled } from 'styled-components';
+import { PLAYER_UPGRADES } from '../Engine/Engine';
 const Store = () => {
     const { playerData, setPlayerData, notify } = useContext(playerContext);
 
@@ -13,14 +14,28 @@ const Store = () => {
         <Wrapper>
             <Title>Purchase</Title>
             <Inner>
-
+                {Object.keys(PLAYER_UPGRADES).map((upgrade) => {
+                    return (
+                        <>
+                        <button>test<br/>test</button>
+                        <Button
+                            key={upgrade}
+                            text={PLAYER_UPGRADES[upgrade].description}
+                            onClick={() => {
+                            }}
+                            />
+                            </>
+                    );
+                })}
 
             </Inner>
         </Wrapper>
 
         <Wrapper>
             <Title>Sell</Title>
-            <Inner></Inner>
+            <Inner>
+
+            </Inner>
         </Wrapper>
 
             </Outer>
