@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/static/css/main.230680af.css",
-    "main.js": "/static/js/main.1db57773.js",
-    "index.html": "/index.html",
-    "main.230680af.css.map": "/static/css/main.230680af.css.map",
-    "main.1db57773.js.map": "/static/js/main.1db57773.js.map"
+    "main.css": "/minedown/static/css/main.230680af.css",
+    "main.js": "/minedown/static/js/main.2c62dadf.js",
+    "index.html": "/minedown/index.html",
+    "main.230680af.css.map": "/minedown/static/css/main.230680af.css.map",
+    "main.2c62dadf.js.map": "/minedown/static/js/main.2c62dadf.js.map"
   },
   "entrypoints": [
     "static/css/main.230680af.css",
-    "static/js/main.1db57773.js"
+    "static/js/main.2c62dadf.js"
   ]
 }
