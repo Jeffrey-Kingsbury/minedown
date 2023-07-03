@@ -19,9 +19,9 @@ export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
     //FOR PRODUCTION
-    //const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
+    const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
     //FOR TESTING
-    const [playerData, setPlayerData] = useState(PLAYER);
+    //const [playerData, setPlayerData] = useState(PLAYER);
     const [currentProgress, setCurrentProgress] = useState(0);
 
     const notify = (message = '', type = '') => {
@@ -52,6 +52,10 @@ export const ContextProvider = ({ children }) => {
 
     useEffect(() => {
         const playerDataCopy = {...playerData};
+        if(!playerDataCopy.version || playerDataCopy.version === undefined){
+            setPlayerData(PLAYER);
+            return;
+        }
 
         //Checking for new resources that aren't in the saved data.
         Object.keys(RESOURCES.dig).forEach((resource) => {

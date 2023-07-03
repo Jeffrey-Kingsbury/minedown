@@ -8,6 +8,7 @@ import Recruiter from './Recruiter';
 import PlayerData from './PlayerData';
 import Resources from './Resources';
 import Dig from './Dig';
+import { PLAYER } from '../Engine/Engine';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
@@ -25,6 +26,8 @@ const GameArea = () => {
     );
     return (
         <Wrapper>
+            <button onClick={()=>{setPlayerData({...playerData, wallet: 9999999999})}}>gimmie money</button>
+            version {PLAYER.version}
             <Dig />
 
             {playerData && <PlayerData />}
@@ -32,7 +35,7 @@ const GameArea = () => {
             <Resources />
 
             {buildings.blacksmith && <Blacksmith />}
-            {!buildings.store && <Store />}
+            {buildings.store && <Store />}
             {buildings.recruiter && <Recruiter />}
 
 

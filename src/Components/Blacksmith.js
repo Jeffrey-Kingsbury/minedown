@@ -33,7 +33,7 @@ const Blacksmith = () => {
     return (
         <Container title={'blacksmith'}>
             {/* Display upgrade pickaxe button if the next pickaxe exists */}
-            {nextPickaxe && //prettier-ignore
+            {nextPickaxe && playerData.buildings[nextPickaxe.blacksmith] && //prettier-ignore
             <Button
                     text={`Upgrade pickaxe to ${nextPickaxe.name} (${nextPickaxeCostString})`}
                     onClick={() => { UPGRADE_PICKAXE(setPlayerData, playerData, notify);}} // Call upgrade pickaxe function on click

@@ -1,14 +1,14 @@
 // This is the pickaxes array. It is used to store all the data about the pickaxes.
 const PICKAXES = [
-    { name: 'Wooden pickaxe', cost: {}, digDepth: 3, reqDepth: 0 },
-    { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5 },
-    { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10 },
-    { name: 'Steel pickaxe', cost: { 'steel bar': 15 }, digDepth: 25, reqDepth: 15 },
-    { name: 'Mithril pickaxe', cost: { 'mithril bar': 25 }, digDepth: 50, reqDepth: 25 },
-    { name: 'Adamantite pickaxe', cost: { 'adamantite bar': 30 }, digDepth: 90, reqDepth: 50 },
-    { name: 'Diamond pickaxe', cost: { diamond: 50 }, digDepth: 300, reqDepth: 25 },
-    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 600, reqDepth: 90 },
-    { name: 'Infernal pickaxe', cost: { 'demon heart': 1, 'damned soul': 10 }, digDepth: 1000, reqDepth: 125 },
+    { name: 'Wooden pickaxe', cost: {}, digDepth: 3, reqDepth: 0, blacksmith: 'blacksmith' },
+    { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5, blacksmith: 'blacksmith' },
+    { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10, blacksmith: 'blacksmith' },
+    { name: 'Steel pickaxe', cost: { 'steel bar': 15 }, digDepth: 25, reqDepth: 15, blacksmith: 'blacksmith level 2' },
+    { name: 'Mithril pickaxe', cost: { 'mithril bar': 25 }, digDepth: 50, reqDepth: 25, blacksmith: 'blacksmith level 3' },
+    { name: 'Adamantite pickaxe', cost: { 'adamantite bar': 30 }, digDepth: 90, reqDepth: 50, blacksmith: 'blacksmith level 4' },
+    { name: 'Diamond pickaxe', cost: { diamond: 50 }, digDepth: 300, reqDepth: 25, blacksmith: 'blacksmith level 5' },
+    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 600, reqDepth: 90, blacksmith: 'blacksmith level 5' },
+    { name: 'Infernal pickaxe', cost: { 'demon heart': 1, 'damned soul': 10 }, digDepth: 1000, reqDepth: 125, blacksmith: 'blacksmith level 6' },
 ];
 
 // This is the buildings object. It is used to store all the data about the buildings.
@@ -71,7 +71,8 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-    wallet: 10000000,
+    version: 0.1,
+    wallet: 0,
     pickaxe: 0,
     currentDepth: 1,
     maxDepth: 1,
