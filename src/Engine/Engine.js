@@ -18,6 +18,7 @@ const BUILDINGS = {
     'blacksmith level 3': { cost: { 'mithril bar':100, stone: 10000, coal: 5000, 'copper bar': 100 }, requires: 'blacksmith level 2' },
     'blacksmith level 4': { cost: { 'adamantite bar':100, stone: 25000, coal: 10000, 'copper bar': 500 }, requires: 'blacksmith level 3' },
     'blacksmith level 5': { cost: { 'diamond':100, stone: 75000, coal: 50000, 'copper bar': 5000 }, requires: 'blacksmith level 4' },
+    'blacksmith level 6': { cost: { 'damned soul':100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 }, requires: 'blacksmith level 5' },
     store: { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
     recruiter: { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
 };
