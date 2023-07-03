@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { playerContext } from '../PlayerContext';
 import Blacksmith from './Blacksmith';
 import Button from './Button';
@@ -12,7 +12,17 @@ import Dig from './Dig';
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
     const { buildings } = playerData;
-
+    const buildingCostString = useMemo(
+        () => (building) => {
+            return (
+                BUILDINGS[building]?.cost &&
+                Object.keys(BUILDINGS[building].cost).map((resource) => {
+                    return ` ${resource}: ${BUILDINGS[building].cost[resource]} `;
+                })
+            );
+        },
+        []
+    );
     return (
         <Wrapper>
             <Dig />
@@ -25,35 +35,24 @@ const GameArea = () => {
             {buildings.store && <Store />}
             {buildings.recruiter && <Recruiter />}
 
-            {!buildings.blacksmith && (
-                <Button
-                    text={'Build Blacksmith (25 Sand, 10 Stone, 5 Coal)'}
-                    disabled={CHECK_DISABLED(playerData, BUILDINGS.blacksmith.cost)}
-                    onClick={() => {
-                        BUILD_BUILDING(playerData, setPlayerData, 'blacksmith', notify);
-                    }}
-                />
-            )}
 
-            {!buildings.store && (
-                <Button
-                    text={'Build a store (50 Stone, 10 iron bars, 25 glass)'}
-                    disabled={CHECK_DISABLED(playerData, BUILDINGS.store.cost)}
-                    onClick={() => {
-                        BUILD_BUILDING(playerData, setPlayerData, 'store', notify);
-                    }}
-                />
-            )}
 
-            {!buildings.recruiter && (
-                <Button
-                    text={'Build a recruiter (50 Stone, 10 steel bars, 50 glass, 10 gold bars)'}
-                    disabled={CHECK_DISABLED(playerData, BUILDINGS.recruiter.cost)}
-                    onClick={() => {
-                        BUILD_BUILDING(playerData, setPlayerData, 'recruiter', notify);
-                    }}
-                />
-            )}
+            {Object.keys(BUILDINGS).map((building) => {
+                if(buildings[building]) return null;
+                if(BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
+                return (
+                    <Button
+                        key={building}
+                        text={`Build a ${building} (${buildingCostString(building)})`}
+                        disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
+                        onClick={() => {
+
+                            BUILD_BUILDING(playerData, setPlayerData, building, notify);
+                        }}
+                    />
+                )
+            })
+            }
         </Wrapper>
     );
 };
