@@ -3,7 +3,7 @@ import Button from './Button';
 import Container from './Container';
 import { playerContext } from '../PlayerContext';
 import { styled } from 'styled-components';
-import { PLAYER_UPGRADES } from '../Engine/Engine';
+import { PLAYER_UPGRADES, PURCHASE_UPGRADE } from '../Engine/Engine';
 const Store = () => {
     const { playerData, setPlayerData, notify } = useContext(playerContext);
 
@@ -15,16 +15,19 @@ const Store = () => {
             <Title>Purchase</Title>
             <Inner>
                 {Object.keys(PLAYER_UPGRADES).map((upgrade) => {
+                    if(playerData.upgrades[upgrade]) return null;
+                    if(!PLAYER_UPGRADES[upgrade].unlockRequirement(playerData)) return null;
+
                     return (
-                        <>
-                        <button>test<br/>test</button>
                         <Button
                             key={upgrade}
-                            text={PLAYER_UPGRADES[upgrade].description}
+                            text={`${PLAYER_UPGRADES[upgrade].name} - ${PLAYER_UPGRADES[upgrade].description} ${PLAYER_UPGRADES[upgrade].priceString}`}
+                            disabled={PLAYER_UPGRADES[upgrade].isDisabled(playerData, upgrade)}
                             onClick={() => {
+                                PLAYER_UPGRADES[upgrade].upgradeFunction(playerData, setPlayerData, upgrade, notify);
                             }}
                             />
-                            </>
+                            
                     );
                 })}
 

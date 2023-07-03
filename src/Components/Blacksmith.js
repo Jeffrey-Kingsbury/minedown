@@ -44,7 +44,7 @@ const Blacksmith = () => {
 {Object.entries(RESOURCES.craft).map(([bar, craft]) => {
     // Check if the player has seen the required resource(s)
     const hasPlayerSeenResources = Object.keys(craft.cost).every(
-        (resource) => playerData.resources[resource] != null
+        (resource) => playerData.items[resource] != null
     );
 
     // If player has seen the required resource(s) before, render the craft button

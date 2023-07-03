@@ -4,21 +4,36 @@ const PICKAXES = [
     { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5 },
     { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10 },
     { name: 'Steel pickaxe', cost: { 'steel bar': 15 }, digDepth: 25, reqDepth: 15 },
-    { name: 'Mithril pickaxe', cost: {'mithril bar': 25}, digDepth: 50, reqDepth: 25 },
-    { name: 'Adamantite pickaxe', cost: {'adamantite bar': 30}, digDepth: 90, reqDepth: 50 },
-    { name: 'Diamond pickaxe', cost: {'diamond':50}, digDepth: 300, reqDepth: 25 },
-    { name: 'Crystal pickaxe', cost: {'crystal shard':100}, digDepth: 600, reqDepth: 90 },
-    { name: 'Infernal pickaxe', cost: {'demon heart' : 1, 'damned soul':10}, digDepth: 1000, reqDepth: 125 },
+    { name: 'Mithril pickaxe', cost: { 'mithril bar': 25 }, digDepth: 50, reqDepth: 25 },
+    { name: 'Adamantite pickaxe', cost: { 'adamantite bar': 30 }, digDepth: 90, reqDepth: 50 },
+    { name: 'Diamond pickaxe', cost: { diamond: 50 }, digDepth: 300, reqDepth: 25 },
+    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 600, reqDepth: 90 },
+    { name: 'Infernal pickaxe', cost: { 'demon heart': 1, 'damned soul': 10 }, digDepth: 1000, reqDepth: 125 },
 ];
 
 // This is the buildings object. It is used to store all the data about the buildings.
 const BUILDINGS = {
     blacksmith: { cost: { sand: 25, stone: 10, coal: 5 } },
-    'blacksmith level 2': { cost: { 'steel bar':100, stone: 1000, coal: 500, 'bronze bar': 100 }, requires: 'blacksmith' },
-    'blacksmith level 3': { cost: { 'mithril bar':100, stone: 10000, coal: 5000, 'copper bar': 100 }, requires: 'blacksmith level 2' },
-    'blacksmith level 4': { cost: { 'adamantite bar':100, stone: 25000, coal: 10000, 'copper bar': 500 }, requires: 'blacksmith level 3' },
-    'blacksmith level 5': { cost: { 'diamond':100, stone: 75000, coal: 50000, 'copper bar': 5000 }, requires: 'blacksmith level 4' },
-    'blacksmith level 6': { cost: { 'damned soul':100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 }, requires: 'blacksmith level 5' },
+    'blacksmith level 2': {
+        cost: { 'steel bar': 100, stone: 1000, coal: 500, 'bronze bar': 100 },
+        requires: 'blacksmith',
+    },
+    'blacksmith level 3': {
+        cost: { 'mithril bar': 100, stone: 10000, coal: 5000, 'copper bar': 100 },
+        requires: 'blacksmith level 2',
+    },
+    'blacksmith level 4': {
+        cost: { 'adamantite bar': 100, stone: 25000, coal: 10000, 'copper bar': 500 },
+        requires: 'blacksmith level 3',
+    },
+    'blacksmith level 5': {
+        cost: { diamond: 100, stone: 75000, coal: 50000, 'copper bar': 5000 },
+        requires: 'blacksmith level 4',
+    },
+    'blacksmith level 6': {
+        cost: { 'damned soul': 100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 },
+        requires: 'blacksmith level 5',
+    },
     store: { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
     recruiter: { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
 };
@@ -69,9 +84,9 @@ const PLAYER = {
     },
     buffs: {},
     nerfs: {},
-    resources: {},
-    craftables: {},
+    items: {},
     buildings: {},
+    upgrades: {},
     miners: {
         qty: 0,
         gains: 1,
@@ -82,13 +97,15 @@ const PLAYER = {
 
 //Populate the player data object with the resources and craftables.
 Object.keys(RESOURCES.dig).forEach((resource) => {
-    if (PLAYER.resources[resource]) return;
-    PLAYER.resources[resource] = null;
+    if (!PLAYER.items[resource]) {
+        PLAYER.items[resource] = null;
+    }
 });
 
 Object.keys(RESOURCES.craft).forEach((resource) => {
-    if (PLAYER.craftables[resource]) return;
-    PLAYER.craftables[resource] = null;
+    if (!PLAYER.items[resource]) {
+        PLAYER.items[resource] = null;
+    }
 });
 
 const DIGGING = (depth, playerData, setPlayerData, notify) => {
@@ -120,10 +137,8 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
 
     // Update resources count
     const updatedResources = {
-        ...playerData.resources,
-        [gainedResource.name]: playerData.resources[gainedResource.name]
-            ? playerData.resources[gainedResource.name] + 1
-            : 1,
+        ...playerData.items,
+        [gainedResource.name]: playerData.items[gainedResource.name] ? playerData.items[gainedResource.name] + 1 : 1,
     };
 
     let updatedDepthProgress = playerData.depthProgress;
@@ -143,7 +158,7 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
                 updatedDepthProgress = { digCount: digcount, unlockChance: unlockChance, realDigCount: realDigCount };
                 setPlayerData({
                     ...playerData,
-                    resources: updatedResources,
+                    items: updatedResources,
                     depthProgress: updatedDepthProgress,
                     maxDepth: playerData.maxDepth + 1,
                     currentDepth: playerData.currentDepth + 1,
@@ -165,14 +180,15 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
     // Update player's resources and depthProgress
     setPlayerData({
         ...playerData,
-        resources: updatedResources,
+        items: updatedResources,
         depthProgress: updatedDepthProgress,
+        totalDigs: playerData.totalDigs + 1,
     });
 };
 
 const AUTO_DIGGING = (playerData, setPlayerData) => {
     let gains = 1;
-    const updatedResources = { ...playerData.resources };
+    const updatedResources = { ...playerData.items };
     const depth = playerData.maxDepth;
     const minerQty = playerData.miners.qty;
     const minerUpgrades = playerData.miners.upgrades;
@@ -208,7 +224,7 @@ const AUTO_DIGGING = (playerData, setPlayerData) => {
 
     setPlayerData({
         ...playerData,
-        resources: updatedResources,
+        items: updatedResources,
     });
 };
 
@@ -216,7 +232,7 @@ const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
     // Get next pickaxe in the list
     const nextPickaxe = PICKAXES[playerData.pickaxe + 1];
     const cost = nextPickaxe.cost;
-    const currentResources = playerData.resources;
+    const currentResources = playerData.items;
     let resourceCheck = true;
 
     // Check if player has enough resources for the upgrade
@@ -233,31 +249,30 @@ const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
 
     // If player has enough resources, upgrade pickaxe and update resources
     if (resourceCheck) {
-        setPlayerData({ ...playerData, pickaxe: playerData.pickaxe + 1, resources: currentResources });
+        setPlayerData({ ...playerData, pickaxe: playerData.pickaxe + 1, items: currentResources });
     }
 };
 
 // Function to craft an item
 const CRAFT_ITEM = (bar, playerData, setPlayerData, notify) => {
     const cost = RESOURCES.craft[bar].cost;
-    const currentResources = playerData.resources;
-    const currentCraftables = playerData.craftables;
+    const currentItems = playerData.items;
     let resourceCheck = true;
 
     Object.entries(cost).forEach(([resource, amount]) => {
-        if (currentResources[resource] < amount || !currentResources[resource]) {
+        if (currentItems[resource] < amount || !currentItems[resource]) {
             notify(`You don't have enough ${resource} to craft ${bar}.`, 'error');
             if (resourceCheck) {
                 resourceCheck = false;
             }
             return;
         }
-        currentResources[resource] -= amount;
+        currentItems[resource] -= amount;
     });
 
     if (resourceCheck) {
-        currentCraftables[bar] = currentCraftables[bar] ? currentCraftables[bar] + 1 : 1;
-        setPlayerData({ ...playerData, craftables: currentCraftables, resources: currentResources });
+        currentItems[bar] = currentItems[bar] ? currentItems[bar] + 1 : 1;
+        setPlayerData({ ...playerData, items: currentItems });
     }
 };
 
@@ -291,7 +306,7 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
     }
     const type = RESOURCES.dig[resource].value ? 'dig' : 'craft';
     const value = RESOURCES[type][resource].value;
-    const currentResources = type === 'dig' ? { ...playerData.resources } : { ...playerData.craftables };
+    const currentResources = playerData.items;
     let currentWallet = playerData.wallet;
 
     if (currentResources[resource] < qty) {
@@ -307,7 +322,7 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
     setPlayerData({
         ...playerData,
         wallet: currentWallet,
-        [type === 'dig' ? 'resources' : 'craftables']: currentResources,
+        items: currentResources,
     });
 };
 
@@ -317,11 +332,7 @@ const CHECK_DISABLED = (playerData, cost) => {
     Object.entries(cost).forEach(([resource, amount]) => {
         if (disabled) return;
 
-        if (!playerData.resources[resource] && !playerData.craftables[resource]) {
-            disabled = true;
-            return;
-        }
-        if (playerData.resources[resource] < amount && playerData.craftables[resource] < amount) {
+        if (!playerData.items[resource] || playerData.items[resource] < amount) {
             disabled = true;
             return;
         }
@@ -331,25 +342,17 @@ const CHECK_DISABLED = (playerData, cost) => {
 
 const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
     const cost = BUILDINGS[building].cost;
-    const currentResources = playerData.resources;
-    const currentCraftables = playerData.craftables;
+    const currentItems = playerData.items;
     const currentBuildings = playerData.buildings;
     let resourceCheck = true;
 
     Object.entries(cost).forEach(([resource, amount]) => {
-        if (currentResources[resource]) {
-            if (currentResources[resource] - amount < 0) {
+        if (currentItems[resource]) {
+            if (currentItems[resource] - amount < 0) {
                 notify(`You don't have enough ${resource} to build ${building}.`, 'error');
                 resourceCheck = false;
             } else {
-                currentResources[resource] -= amount;
-            }
-        } else if (currentCraftables[resource]) {
-            if (currentCraftables[resource] - amount < 0) {
-                notify(`You don't have enough ${resource} to build ${building}.`, 'error');
-                resourceCheck = false;
-            } else {
-                currentCraftables[resource] -= amount;
+                currentItems[resource] -= amount;
             }
         } else {
             notify(`You don't have enough ${resource} to build ${building}.`, 'error');
@@ -363,8 +366,7 @@ const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
         setPlayerData({
             ...playerData,
             buildings: currentBuildings,
-            resources: currentResources,
-            craftables: currentCraftables,
+            items: currentItems,
         });
         return;
     }
@@ -374,6 +376,8 @@ const COLOR_PICKER = (name) => {
     switch (name) {
         case 'sand':
             return '#e8cb4a';
+        case 'clay':
+            return '#bda562';
         case 'stone':
             return '#707070';
         case 'coal':
@@ -392,6 +396,12 @@ const COLOR_PICKER = (name) => {
             return '#00396e';
         case 'adamantite':
             return '#0e5227';
+        case 'crystal shard':
+            return '#72b1b8';
+        case 'damned soul':
+            return '#a30000';
+        case 'demon heart':
+            return '#520d0d';
         default:
             return 'black';
     }
@@ -400,13 +410,98 @@ const COLOR_PICKER = (name) => {
 const PLAYER_UPGRADES = {
     speed1: {
         name: 'Speed up',
-        description: 'Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
-        unlockRequirement: {
-            totalDigs: 100,
+        description: '⛏ Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
+        priceString: '1000$',
+        cost: { wallet: 1000 },
+        isDisabled: (playerData, upgrade) => {
+            let check = false;
+            if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+                check = true;
+            }
+
+            if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+                Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+                    if(check) return;
+                    if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+                        check = true;
+                    }
+                });
+            }
+            return check;
         },
-        upgradeFunction: (playerData, setPlayerData) => {
+        unlockRequirement: (playerData) => {
+            if (playerData.totalDigs >= 0) return true;
+            return false;
+        },
+        upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
             if (playerData.digSpeed >= 51) return;
-            setPlayerData({ ...playerData, digSpeed: 51 });
+            const cost = PLAYER_UPGRADES[upgrade].cost;
+            const currentItems = {...playerData.items};
+            let wallet = playerData.wallet;
+            let check = false;
+
+            if(cost.wallet > wallet) return;
+            if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+                Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+                    if(check) return;
+                    if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+                        check = true;
+                    }
+                    currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+                });
+            }
+            if(check) return;
+            wallet -= cost.wallet;
+            notify('Gotta go fast! 🏃‍♂️', 'success');
+            setPlayerData({ ...playerData, digSpeed: 51, upgrades: { ...playerData.upgrades, speed1: true }, wallet: wallet, items: currentItems });
+        },
+    },
+    speed2: {
+        name: 'Strength up',
+        description: '⛏ Increase your dig strength, allowing you to dig in 1 click instead of 2.',
+        priceString: '100,000$',
+        cost: { wallet: 100000},
+        isDisabled: (playerData, upgrade) => {
+            let check = false;
+            if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+                check = true;
+            }
+
+            if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+                Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+                    if(check) return;
+                    if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+                        check = true;
+                    }
+                });
+            }
+            return check;
+        },
+        unlockRequirement: (playerData) => {
+            if (playerData.totalDigs >= 1000 && playerData.upgrades.speed1) return true;
+            return false;
+        },
+        upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+            if (playerData.digSpeed >= 101) return;
+            const cost = PLAYER_UPGRADES[upgrade].cost;
+            const currentItems = {...playerData.items};
+            let wallet = playerData.wallet;
+            let check = false;
+
+            if(cost.wallet > wallet) return;
+            if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+                Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+                    if(check) return;
+                    if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+                        check = true;
+                    }
+                    currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+                });
+            }
+            if(check) return;
+            wallet -= cost.wallet;
+            notify('Strong. Like bull. 💪', 'success');
+            setPlayerData({ ...playerData, digSpeed: 101, upgrades: { ...playerData.upgrades, speed1: true }, wallet: wallet, items: currentItems });
         },
     },
 };

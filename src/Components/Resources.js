@@ -3,28 +3,29 @@ import { useContext } from 'react';
 import { playerContext } from '../PlayerContext';
 import { COLOR_PICKER } from '../Engine/Engine';
 import { styled } from 'styled-components';
+import { RESOURCES } from '../Engine/Engine';
 
 const Resources = () => {
     const { playerData } = useContext(playerContext);
-    const { resources, craftables } = playerData;
+    const { items } = playerData;
     return (
         <Container title={'resources'}>
             <Title>Raw Resources</Title>
-            {Object.keys(resources).map((resource) => {
-                if(resources[resource] === null) return null;
+            {Object.keys(RESOURCES.dig).map((resource) => {
+                if(items[resource] === null) return null;
                 return (
                     <p key={resource} style={{color:COLOR_PICKER(resource)}}>
-                        {resource}: {resources[resource]}
+                        {resource}: {items[resource]}
                     </p>
                 );
             })}
 
             <Title>Crafted Resources</Title>
-            {Object.keys(craftables).map((resource) => {
-                if(craftables[resource] === null) return null;
+            {Object.keys(RESOURCES.craft).map((resource) => {
+                if(items[resource] === null) return null;
                 return (
                     <p key={resource} style={{color:COLOR_PICKER(resource)}}>
-                        {resource}: {craftables[resource]}
+                        {resource}: {items[resource]}
                     </p>
                 );
             })}

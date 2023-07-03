@@ -27,12 +27,12 @@ const GameArea = () => {
         <Wrapper>
             <Dig />
 
-            <PlayerData />
+            {playerData && <PlayerData />}
 
             <Resources />
 
             {buildings.blacksmith && <Blacksmith />}
-            {buildings.store && <Store />}
+            {!buildings.store && <Store />}
             {buildings.recruiter && <Recruiter />}
 
 

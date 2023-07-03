@@ -17,8 +17,8 @@ const PlayerData = () => {
 
     return (
         <Container title={'Player Data'}>
-            <p>Pickaxe: {pickaxeData.name}</p>
-            <p>Pickaxe Max Depth: {pickaxeData.digDepth}</p>
+            <p>Pickaxe: {pickaxeData && pickaxeData.name}</p>
+            <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
             <p>Current Depth: {currentDepth}</p>
             <span>
                 Resources at current depth:{' '}
