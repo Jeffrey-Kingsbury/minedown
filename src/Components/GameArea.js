@@ -26,8 +26,10 @@ const GameArea = () => {
     );
     return (
         <Wrapper>
-            <button onClick={()=>{setPlayerData({...playerData, wallet: 9999999999})}}>gimmie money</button>
-            version {PLAYER.version}
+            <Title>Minedown
+                <p>version {PLAYER.version}</p>
+            </Title>
+            
             <Dig />
 
             {playerData && <PlayerData />}
@@ -67,6 +69,20 @@ const Wrapper = styled.div`
     overflow-x: hidden;
     border: 1px solid black;
     user-select: none;
+`;
+
+const Title = styled.h1`
+width: 100%;
+max-width: 600px;
+font-size: 55px;
+font-family: 'Press Start', cursive;
+margin: 1rem;
+text-align: center;
+p{
+    font-size: 10px;
+    text-align: right;
+    width: 100%;
+}
 `;
 
 export default GameArea;

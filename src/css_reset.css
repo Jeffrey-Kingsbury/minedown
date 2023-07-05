@@ -44,5 +44,10 @@ table {
 
 @font-face {
 	font-family: 'Metal Mania';
-	src: local('Metal+Mania'), url(./MetalMania-Regular.ttf) format('truetype');
+	src: local('Metal+Mania'), url(./fonts/MetalMania-Regular.ttf) format('truetype');
+  }
+
+  @font-face {
+	font-family: 'press start';
+	src: local('Press+Start+2P'), url(./fonts/PressStart2P-Regular.ttf) format('truetype');
   }
