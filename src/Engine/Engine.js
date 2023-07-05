@@ -7,7 +7,7 @@ const PICKAXES = [
     { name: 'Mithril pickaxe', cost: { 'mithril bar': 25 }, digDepth: 50, reqDepth: 25, blacksmith: 'blacksmith level 3' },
     { name: 'Adamantite pickaxe', cost: { 'adamantite bar': 30 }, digDepth: 90, reqDepth: 50, blacksmith: 'blacksmith level 4' },
     { name: 'Diamond pickaxe', cost: { diamond: 50 }, digDepth: 300, reqDepth: 25, blacksmith: 'blacksmith level 5' },
-    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 600, reqDepth: 90, blacksmith: 'blacksmith level 5' },
+    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 666 , reqDepth: 90, blacksmith: 'blacksmith level 5' },
     { name: 'Infernal pickaxe', cost: { 'demon heart': 1, 'damned soul': 10 }, digDepth: 1000, reqDepth: 125, blacksmith: 'blacksmith level 6' },
 ];
 
@@ -78,11 +78,17 @@ const PLAYER = {
     maxDepth: 1,
     digSpeed: 34,
     totalDigs: 0,
+    inHell: false,
+    inPurgatory: false,
+    inHeaven: false,
     depthProgress: {
         realDigCount: 0,
         digCount: 0,
         unlockChance: 0,
     },
+    hellItems:{},
+    purgatoryItems:{},
+    heavenItems:{},
     buffs: {},
     nerfs: {},
     items: {},
@@ -332,7 +338,6 @@ const CHECK_DISABLED = (playerData, cost) => {
     let disabled = false;
     Object.entries(cost).forEach(([resource, amount]) => {
         if (disabled) return;
-
         if (!playerData.items[resource] || playerData.items[resource] < amount) {
             disabled = true;
             return;
@@ -502,7 +507,7 @@ const PLAYER_UPGRADES = {
             if(check) return;
             wallet -= cost.wallet;
             notify('Strong. Like bull. 💪', 'success');
-            setPlayerData({ ...playerData, digSpeed: 101, upgrades: { ...playerData.upgrades, speed1: true }, wallet: wallet, items: currentItems });
+            setPlayerData({ ...playerData, digSpeed: 101, upgrades: { ...playerData.upgrades, speed2: true }, wallet: wallet, items: currentItems });
         },
     },
 };

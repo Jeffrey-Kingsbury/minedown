@@ -41,3 +41,8 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+@font-face {
+	font-family: 'Metal Mania';
+	src: local('Metal+Mania'), url(./MetalMania-Regular.ttf) format('truetype');
+  }

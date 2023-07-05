@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { playerContext } from '../PlayerContext';
 import { CHANGE_DEPTH, PICKAXES, RESOURCES, COLOR_PICKER } from '../Engine/Engine';
 import Button from './Button';
+import { styled } from 'styled-components';
 const PlayerData = () => {
     const { playerData, setPlayerData } = useContext(playerContext);
     const { wallet, currentDepth, maxDepth, depthProgress } = playerData;
@@ -16,10 +17,11 @@ const PlayerData = () => {
     };
 
     return (
-        <Container title={'Player Data'}>
+        <>
+        {!playerData.inHell && <Container title={'Player Data'}>
             <p>Pickaxe: {pickaxeData && pickaxeData.name}</p>
             <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
-            <p>Current Depth: {currentDepth}</p>
+            <p style={{fontFamily:'arial, sans-serif!important'}}>Current Depth: {currentDepth}</p>
             <span>
                 Resources at current depth:{' '}
                 {resourcesAtDepth().map((e, i) => {
@@ -43,16 +45,27 @@ const PlayerData = () => {
                     CHANGE_DEPTH(playerData, setPlayerData, -1);
                 }}
                 disabled={currentDepth - 1 < 1}
-            />
+                />
             <Button
                 text="Depth DOWN"
                 onClick={() => {
                     CHANGE_DEPTH(playerData, setPlayerData, 1);
                 }}
                 disabled={currentDepth + 1 > maxDepth}
-            />
-        </Container>
+                />
+        </Container>}
+                </>
     );
 };
 
+const Dialog = styled.dialog`
+width: 100%;
+height: 100dvh;
+background-color: white;
+z-index: 999999;
+position: absolute;
+::backdrop {
+    background-color: white;
+}
+`;
 export default PlayerData;
