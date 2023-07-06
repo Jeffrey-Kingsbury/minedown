@@ -1,13 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.230680af.css",
-    "main.js": "/static/js/main.d6fd1067.js",
+    "main.css": "/static/css/main.45e9342e.css",
+    "main.js": "/static/js/main.d32cfe78.js",
+    "static/media/MetalMania-Regular.ttf": "/static/media/MetalMania-Regular.3b5d2a882c4cfbed7ba5.ttf",
+    "static/media/PressStart2P-Regular.ttf": "/static/media/PressStart2P-Regular.21503c6a5385ab41dde9.ttf",
     "index.html": "/index.html",
-    "main.230680af.css.map": "/static/css/main.230680af.css.map",
-    "main.d6fd1067.js.map": "/static/js/main.d6fd1067.js.map"
+    "main.45e9342e.css.map": "/static/css/main.45e9342e.css.map",
+    "main.d32cfe78.js.map": "/static/js/main.d32cfe78.js.map"
   },
   "entrypoints": [
-    "static/css/main.230680af.css",
-    "static/js/main.d6fd1067.js"
+    "static/css/main.45e9342e.css",
+    "static/js/main.d32cfe78.js"
   ]
 }
