@@ -69,6 +69,9 @@ const Wrapper = styled.div`
     overflow-x: hidden;
     border: 1px solid black;
     user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const Title = styled.h1`
