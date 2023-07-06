@@ -4,3 +4,4 @@
 * Changed max depth of Crystal pickaxe to 666
 * Added new fonts (Metal mania, Press start 2p)
 * Removed 'gimmie money' debug button
+* Added SELL options to store

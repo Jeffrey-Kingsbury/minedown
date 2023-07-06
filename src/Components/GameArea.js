@@ -26,10 +26,11 @@ const GameArea = () => {
     );
     return (
         <Wrapper>
-            <Title>Minedown
+            <Title>
+                Minedown
                 <p>version {PLAYER.version}</p>
             </Title>
-            
+
             <Dig />
 
             {playerData && <PlayerData />}
@@ -40,24 +41,20 @@ const GameArea = () => {
             {buildings.store && <Store />}
             {buildings.recruiter && <Recruiter />}
 
-
-
             {Object.keys(BUILDINGS).map((building) => {
-                if(buildings[building]) return null;
-                if(BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
+                if (buildings[building]) return null;
+                if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
                 return (
                     <Button
                         key={building}
                         text={`Build a ${building} (${buildingCostString(building)})`}
                         disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
                         onClick={() => {
-
                             BUILD_BUILDING(playerData, setPlayerData, building, notify);
                         }}
                     />
-                )
-            })
-            }
+                );
+            })}
         </Wrapper>
     );
 };
@@ -75,17 +72,17 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-width: 100%;
-max-width: 600px;
-font-size: 55px;
-font-family: 'Press Start', cursive;
-margin: 1rem;
-text-align: center;
-p{
-    font-size: 10px;
-    text-align: right;
     width: 100%;
-}
+    max-width: 600px;
+    font-size: 55px;
+    font-family: 'Press Start', cursive;
+    margin: 1rem;
+    text-align: center;
+    p {
+        font-size: 10px;
+        text-align: right;
+        width: 100%;
+    }
 `;
 
 export default GameArea;

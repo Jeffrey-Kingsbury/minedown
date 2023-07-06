@@ -1,46 +1,74 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Button from './Button';
 import Container from './Container';
 import { playerContext } from '../PlayerContext';
 import { styled } from 'styled-components';
-import { PLAYER_UPGRADES, PURCHASE_UPGRADE } from '../Engine/Engine';
+import { PLAYER_UPGRADES, PURCHASE_UPGRADE, RESOURCES, SELL_RESOURCE } from '../Engine/Engine';
 const Store = () => {
     const { playerData, setPlayerData, notify } = useContext(playerContext);
+    const [sellQuantity, setSellQuantity] = useState(1);
 
     return (
         <Container title={'Store'}>
             <Outer>
+                <Wrapper>
+                    <Title>Purchase</Title>
+                    <Inner>
+                        {Object.keys(PLAYER_UPGRADES).map((upgrade) => {
+                            if (playerData.upgrades[upgrade]) return null;
+                            if (!PLAYER_UPGRADES[upgrade].unlockRequirement(playerData)) return null;
 
-        <Wrapper>
-            <Title>Purchase</Title>
-            <Inner>
-                {Object.keys(PLAYER_UPGRADES).map((upgrade) => {
-                    if(playerData.upgrades[upgrade]) return null;
-                    if(!PLAYER_UPGRADES[upgrade].unlockRequirement(playerData)) return null;
+                            return (
+                                <Button
+                                    key={upgrade}
+                                    text={`${PLAYER_UPGRADES[upgrade].name} - ${PLAYER_UPGRADES[upgrade].description} ${PLAYER_UPGRADES[upgrade].priceString}`}
+                                    disabled={PLAYER_UPGRADES[upgrade].isDisabled(playerData, upgrade)}
+                                    onClick={() => {
+                                        PLAYER_UPGRADES[upgrade].upgradeFunction(
+                                            playerData,
+                                            setPlayerData,
+                                            upgrade,
+                                            notify
+                                        );
+                                    }}
+                                />
+                            );
+                        })}
+                    </Inner>
+                </Wrapper>
 
-                    return (
-                        <Button
-                            key={upgrade}
-                            text={`${PLAYER_UPGRADES[upgrade].name} - ${PLAYER_UPGRADES[upgrade].description} ${PLAYER_UPGRADES[upgrade].priceString}`}
-                            disabled={PLAYER_UPGRADES[upgrade].isDisabled(playerData, upgrade)}
-                            onClick={() => {
-                                PLAYER_UPGRADES[upgrade].upgradeFunction(playerData, setPlayerData, upgrade, notify);
-                            }}
-                            />
-                            
-                    );
-                })}
-
-            </Inner>
-        </Wrapper>
-
-        <Wrapper>
-            <Title>Sell</Title>
-            <Inner>
-
-            </Inner>
-        </Wrapper>
-
+                <Wrapper>
+                    <Title>Sell</Title>
+                    <Inner>
+                        {Object.keys(playerData.items).map((item) => {
+                            if(playerData.items[item] < 1) return null;
+                            if (RESOURCES.dig[item]) {
+                                return (
+                                    <Button
+                                        key={item}
+                                        text={`Sell ${sellQuantity}x ${item} for $${Number(RESOURCES.dig[item].value).toLocaleString('en')}`}
+                                        disabled={false}
+                                        onClick={() => {
+                                            SELL_RESOURCE(playerData, setPlayerData, item, 1, notify);
+                                        }}
+                                    />
+                                );
+                            }
+                            else{
+                                return (
+                                    <Button
+                                        key={item}
+                                        text={`Sell ${sellQuantity}x ${item} for $${Number(RESOURCES.craft[item].value).toLocaleString('en')}`}
+                                        disabled={false}
+                                        onClick={() => {
+                                            SELL_RESOURCE(playerData, setPlayerData, item, 1, notify);
+                                        }}
+                                    />
+                                );
+                            }
+                        })}
+                    </Inner>
+                </Wrapper>
             </Outer>
         </Container>
     );
@@ -88,7 +116,6 @@ const Inner = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
     gap: 3px;
-    
 `;
 
 export default Store;

@@ -311,11 +311,15 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
         notify(`Error: Resource '${resource}' does not exist.`, 'error');
         return;
     }
-    const type = RESOURCES.dig[resource].value ? 'dig' : 'craft';
+    const type = RESOURCES.dig[resource] ? 'dig' : 'craft';
     const value = RESOURCES[type][resource].value;
     const currentResources = playerData.items;
     let currentWallet = playerData.wallet;
 
+    if(currentResources[resource] - qty < 0){
+        notify(`You don't have enough ${resource} to sell.`, 'error');
+        return;
+    }
     if (currentResources[resource] < qty) {
         currentWallet += currentResources[resource] * value;
         notify(`Sold ${currentResources[resource]}x ${resource} for ${currentResources[resource] * value}$`, 'success');
