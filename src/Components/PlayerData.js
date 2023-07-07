@@ -18,54 +18,59 @@ const PlayerData = () => {
 
     return (
         <>
-        {!playerData.inHell && <Container title={'Player Data'}>
-            <p>Pickaxe: {pickaxeData && pickaxeData.name}</p>
-            <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
-            <p style={{fontFamily:'arial, sans-serif!important'}}>Current Depth: {currentDepth}</p>
-            <span>
-                Resources at current depth:{' '}
-                {resourcesAtDepth().map((e, i) => {
-                    if (i === resourcesAtDepth().length - 1) {
-                        return <p key={e.name} style={{ display: 'inline', color: COLOR_PICKER(e.name) }}>{e.name}</p>;
-                    } else {
-                        return <span key={e.name}><p style={{ display: 'inline', color: COLOR_PICKER(e.name) }}>{e.name}</p>, </span>;
-                    }
-                })}
-            </span>
-            <p>Max Depth: {maxDepth}</p>
-            <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
-            <p>
-                Chance of unlocking a new depth:{' '}
-                {depthProgress.unlockChance <= 0 ? 0 : (depthProgress.unlockChance * 100).toFixed(0)}%
-            </p>
-            <p>Wallet: {wallet}$</p>
-            <Button
-                text="Depth UP"
-                onClick={() => {
-                    CHANGE_DEPTH(playerData, setPlayerData, -1);
-                }}
-                disabled={currentDepth - 1 < 1}
+            <Wrapper>
+                <p>Current ⛏: {pickaxeData && pickaxeData.name}</p>
+                <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
+                <p style={{ fontFamily: 'arial, sans-serif!important' }}>Current Depth: {currentDepth}</p>
+                <span>
+                    Resources at current depth:{' '}
+                    {resourcesAtDepth().map((e, i) => {
+                        if (i === resourcesAtDepth().length - 1) {
+                            return (
+                                <p key={e.name} style={{ display: 'inline', color:COLOR_PICKER[e.name] || 'black' }}>
+                                    {e.name}
+                                </p>
+                            );
+                        } else {
+                            return (
+                                <span key={e.name}>
+                                    <p style={{ display: 'inline', color:COLOR_PICKER[e.name] }}>{e.name}</p>,{' '}
+                                </span>
+                            );
+                        }
+                    })}
+                </span>
+                <p>Max Depth: {maxDepth}</p>
+                <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
+                <p>
+                    Chance of unlocking a new depth:{' '}
+                    {depthProgress.unlockChance <= 0 ? 0 : (depthProgress.unlockChance * 100).toFixed(0)}%
+                </p>
+                <p>Wallet: {wallet}$</p>
+                <Button
+                    text="Depth UP"
+                    onClick={() => {
+                        CHANGE_DEPTH(playerData, setPlayerData, -1);
+                    }}
+                    disabled={currentDepth - 1 < 1}
                 />
-            <Button
-                text="Depth DOWN"
-                onClick={() => {
-                    CHANGE_DEPTH(playerData, setPlayerData, 1);
-                }}
-                disabled={currentDepth + 1 > maxDepth}
+                <Button
+                    text="Depth DOWN"
+                    onClick={() => {
+                        CHANGE_DEPTH(playerData, setPlayerData, 1);
+                    }}
+                    disabled={currentDepth + 1 > maxDepth}
                 />
-        </Container>}
-                </>
+            </Wrapper>
+        </>
     );
 };
 
-const Dialog = styled.dialog`
-width: 100%;
-height: 100dvh;
-background-color: white;
-z-index: 999999;
-position: absolute;
-::backdrop {
-    background-color: white;
+const Wrapper = styled.div`
+p, span{
+    font-size: 20px;
+    font-weight: 300;
+    margin: 15px 0;
 }
 `;
 export default PlayerData;

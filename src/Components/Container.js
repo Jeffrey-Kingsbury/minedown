@@ -12,8 +12,8 @@ const Container = ({ children, title }) => {
 const Wrapper = styled.div`
     width: 100%;
     max-width: 600px;
-    margin: 2rem;
-    min-height: 200px;
+    height: 300px;
+    margin: 0 2rem;
     position: relative;
     text-transform: capitalize;
 `;
@@ -32,14 +32,14 @@ const Title = styled.p`
 const Inner = styled.div`
     width: 100%;
     height: 100%;
-    min-height: 200px;
     display: flex;
     flex-direction: column;
     border: 1px solid black;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1rem;
     gap: 3px;
+    box-sizing: border-box;
+    padding: 1rem;
     --shadow-color: 0deg 0% 64%;
     box-shadow: 0.2px 0.2px hsl(var(--shadow-color) / 0.45),
     0px 0.9px 0.9px -0.5px hsl(var(--shadow-color) / 0.42),

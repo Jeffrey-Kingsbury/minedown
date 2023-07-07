@@ -19,9 +19,9 @@ export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
     //FOR PRODUCTION
-    const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
+    //const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
     //FOR TESTING
-    //const [playerData, setPlayerData] = useState(PLAYER);
+    const [playerData, setPlayerData] = useState(PLAYER);
     const [currentProgress, setCurrentProgress] = useState(0);
 
     const notify = (message = '', type = '') => {

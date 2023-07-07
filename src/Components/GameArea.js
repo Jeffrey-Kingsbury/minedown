@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { playerContext } from '../PlayerContext';
 import Blacksmith from './Blacksmith';
 import Button from './Button';
@@ -9,10 +9,14 @@ import PlayerData from './PlayerData';
 import Resources from './Resources';
 import Dig from './Dig';
 import { PLAYER } from '../Engine/Engine';
+import WideWrapper from './WideWrapper';
+import Changelog from './Changelog';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
     const { buildings } = playerData;
+    const [changelogOpen, setChangelogOpen] = useState(false);
+
     const buildingCostString = useMemo(
         () => (building) => {
             return (
@@ -26,16 +30,21 @@ const GameArea = () => {
     );
     return (
         <Wrapper>
+            <Dialog open={changelogOpen}>
+                <Changelog setChangelogOpen={setChangelogOpen}/>
+            </Dialog>
             <Title>
                 Minedown
-                <p>version {PLAYER.version}</p>
+                <p onClick={()=>{setChangelogOpen(!changelogOpen)}}>version {PLAYER.version}</p>
             </Title>
 
             <Dig />
 
+<WideWrapper>
             {playerData && <PlayerData />}
-
             <Resources />
+</WideWrapper>
+
 
             {buildings.blacksmith && <Blacksmith />}
             {buildings.store && <Store />}
@@ -82,7 +91,15 @@ const Title = styled.h1`
         font-size: 10px;
         text-align: right;
         width: 100%;
+        cursor: pointer;
     }
+`;
+
+const Dialog = styled.dialog`
+margin-top: 1rem;
+width: 80%;
+background-color: white;
+z-index: 9999999;
 `;
 
 export default GameArea;
