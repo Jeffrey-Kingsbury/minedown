@@ -4,6 +4,7 @@ import { playerContext } from '../PlayerContext';
 import { CHANGE_DEPTH, PICKAXES, RESOURCES, COLOR_PICKER } from '../Engine/Engine';
 import Button from './Button';
 import { styled } from 'styled-components';
+import Select from './Select';
 const PlayerData = () => {
     const { playerData, setPlayerData } = useContext(playerContext);
     const { wallet, currentDepth, maxDepth, depthProgress } = playerData;
@@ -16,6 +17,11 @@ const PlayerData = () => {
         return potentialResources;
     };
 
+    const depthArray = [];
+    for (let x = 0; x < playerData.maxDepth; x++) {
+        depthArray.push(x);
+    }
+
     return (
         <>
             <Wrapper>
@@ -27,14 +33,14 @@ const PlayerData = () => {
                     {resourcesAtDepth().map((e, i) => {
                         if (i === resourcesAtDepth().length - 1) {
                             return (
-                                <p key={e.name} style={{ display: 'inline', color:COLOR_PICKER[e.name] || 'black' }}>
+                                <p key={e.name} style={{ display: 'inline', color: COLOR_PICKER[e.name] || 'black' }}>
                                     {e.name}
                                 </p>
                             );
                         } else {
                             return (
                                 <span key={e.name}>
-                                    <p style={{ display: 'inline', color:COLOR_PICKER[e.name] }}>{e.name}</p>,{' '}
+                                    <p style={{ display: 'inline', color: COLOR_PICKER[e.name] }}>{e.name}</p>,{' '}
                                 </span>
                             );
                         }
@@ -61,22 +67,33 @@ const PlayerData = () => {
                     }}
                     disabled={currentDepth + 1 > maxDepth}
                 />
+
+                <Select>
+                    {depthArray.map((e) => {
+                        return (
+                            <option key={e} value={e}>
+                                {e}
+                            </option>
+                        );
+                    })}
+                </Select>
             </Wrapper>
         </>
     );
 };
 
 const Wrapper = styled.div`
-border: 1px solid black;
-width: 48%;
-min-width: 600px;
-padding: 1rem;
-box-sizing: border-box;
-margin: 0 0 1rem 0;
-p, span{
-    font-size: 20px;
-    font-weight: 300;
-    margin: 15px 0;
-}
+    border: 1px solid black;
+    width: 48%;
+    min-width: 600px;
+    padding: 1rem;
+    box-sizing: border-box;
+    margin: 0 0 1rem 0;
+    p,
+    span {
+        font-size: 20px;
+        font-weight: 300;
+        margin: 15px 0;
+    }
 `;
 export default PlayerData;

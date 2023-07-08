@@ -53,11 +53,11 @@ const GameArea = () => {
             </WideWrapper>
 
             <WideWrapper>
-                {!buildings.blacksmith && <Blacksmith />}
-                {!buildings.store && <Store />}
+                {buildings.blacksmith && <Blacksmith />}
+                {buildings.store && <Store />}
             </WideWrapper>
             <WideWrapper>
-                {!buildings.recruiter && <Recruiter />}
+                {buildings.recruiter && <Recruiter />}
 
                 <Container>
                     {Object.keys(BUILDINGS).map((building) => {
