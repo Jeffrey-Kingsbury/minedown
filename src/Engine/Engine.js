@@ -96,7 +96,7 @@ const RESOURCES = {
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
     version: '0.3',
-    wallet: 999999999999999,
+    wallet: 0,
     pickaxe: 0,
     currentDepth: 1,
     maxDepth: 1,
@@ -129,13 +129,13 @@ const PLAYER = {
 //Populate the player data object with the resources and craftables.
 Object.keys(RESOURCES.dig).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = 10000000;
+        PLAYER.items[resource] = null;
     }
 });
 
 Object.keys(RESOURCES.craft).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = 10000000;
+        PLAYER.items[resource] = null;
     }
 });
 

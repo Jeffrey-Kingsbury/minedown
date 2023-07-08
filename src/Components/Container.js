@@ -10,10 +10,11 @@ const Container = ({ children, title }) => {
 };
 
 const Wrapper = styled.div`
-    width: 100%;
-    max-width: 600px;
-    height: 300px;
-    margin: 0 2rem;
+    width: 48%;
+    min-width: 600px;
+    height: 80%;
+    min-height: 300px;
+    margin: 1rem 0rem;
     position: relative;
     text-transform: capitalize;
 `;

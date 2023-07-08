@@ -49,11 +49,13 @@ const Title = styled.p`
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 48%;
+    min-width: 600px;
     min-height: 300px;
-    max-width: 600px;
-    margin: 0 2rem;
+    border: 1px solid black;
+    padding: 1rem;
     box-sizing: border-box;
+    margin: 0 0 1rem 0;
 `;
 
 const Items = styled.div`

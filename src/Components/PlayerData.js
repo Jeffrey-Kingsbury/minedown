@@ -67,6 +67,12 @@ const PlayerData = () => {
 };
 
 const Wrapper = styled.div`
+border: 1px solid black;
+width: 48%;
+min-width: 600px;
+padding: 1rem;
+box-sizing: border-box;
+margin: 0 0 1rem 0;
 p, span{
     font-size: 20px;
     font-weight: 300;

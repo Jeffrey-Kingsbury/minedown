@@ -11,6 +11,7 @@ import Dig from './Dig';
 import { PLAYER } from '../Engine/Engine';
 import WideWrapper from './WideWrapper';
 import Changelog from './Changelog';
+import Container from './Container';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
@@ -31,39 +32,51 @@ const GameArea = () => {
     return (
         <Wrapper>
             <Dialog open={changelogOpen}>
-                <Changelog setChangelogOpen={setChangelogOpen}/>
+                <Changelog setChangelogOpen={setChangelogOpen} />
             </Dialog>
             <Title>
                 Minedown
-                <p onClick={()=>{setChangelogOpen(!changelogOpen)}}>version {PLAYER.version}</p>
+                <p
+                    onClick={() => {
+                        setChangelogOpen(!changelogOpen);
+                    }}
+                >
+                    version {PLAYER.version}
+                </p>
             </Title>
 
             <Dig />
 
-<WideWrapper>
-            {playerData && <PlayerData />}
-            <Resources />
-</WideWrapper>
+            <WideWrapper>
+                {playerData && <PlayerData />}
+                <Resources />
+            </WideWrapper>
 
+            <WideWrapper>
+                {!buildings.blacksmith && <Blacksmith />}
+                {!buildings.store && <Store />}
+            </WideWrapper>
+            <WideWrapper>
+                {!buildings.recruiter && <Recruiter />}
 
-            {buildings.blacksmith && <Blacksmith />}
-            {buildings.store && <Store />}
-            {buildings.recruiter && <Recruiter />}
-
-            {Object.keys(BUILDINGS).map((building) => {
-                if (buildings[building]) return null;
-                if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
-                return (
-                    <Button
-                        key={building}
-                        text={`Build a ${building} (${buildingCostString(building)})`}
-                        disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
-                        onClick={() => {
-                            BUILD_BUILDING(playerData, setPlayerData, building, notify);
-                        }}
-                    />
-                );
-            })}
+                <Container>
+                    {Object.keys(BUILDINGS).map((building) => {
+                        if (buildings[building]) return null;
+                        if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false)
+                            return null;
+                        return (
+                            <Button
+                                key={building}
+                                text={`Build a ${building} (${buildingCostString(building)})`}
+                                disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
+                                onClick={() => {
+                                    BUILD_BUILDING(playerData, setPlayerData, building, notify);
+                                }}
+                            />
+                        );
+                    })}
+                </Container>
+            </WideWrapper>
         </Wrapper>
     );
 };
@@ -96,10 +109,10 @@ const Title = styled.h1`
 `;
 
 const Dialog = styled.dialog`
-margin-top: 1rem;
-width: 80%;
-background-color: white;
-z-index: 9999999;
+    margin-top: 1rem;
+    width: 80%;
+    background-color: white;
+    z-index: 9999999;
 `;
 
 export default GameArea;

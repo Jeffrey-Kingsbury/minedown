@@ -12,7 +12,7 @@ width: 100%;
 flex-wrap: wrap;
 display: flex;
 flex-direction: row;
-justify-content: center;
+justify-content: space-around;
 align-items: flex-start;
 `;
 
