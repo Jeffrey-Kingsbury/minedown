@@ -308,10 +308,9 @@ const CRAFT_ITEM = (bar, playerData, setPlayerData, notify) => {
 };
 
 // Function to change the player's current depth.
-const CHANGE_DEPTH = (playerData, setPlayerData, diff) => {
-    const newDepth = playerData.currentDepth + diff;
-    if (newDepth < 1 || newDepth > playerData.maxDepth) return;
-    setPlayerData({ ...playerData, currentDepth: newDepth });
+const CHANGE_DEPTH = (playerData, setPlayerData, depth) => {
+    if (depth < 1 || depth > playerData.maxDepth) return;
+    setPlayerData({ ...playerData, currentDepth: depth });
 };
 
 //WIP
