@@ -29,7 +29,8 @@ const PlayerData = () => {
 
     return (
         <>
-            <Wrapper>
+            <Container title="player data">
+                <p>Wallet: {wallet}$</p>
                 <p>Current ⛏: {pickaxeData && pickaxeData.name}</p>
                 <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
                 <p style={{ fontFamily: 'arial, sans-serif!important' }}>Current Depth: {currentDepth}</p>
@@ -57,7 +58,7 @@ const PlayerData = () => {
                     Chance of unlocking a new depth:{' '}
                     {depthProgress.unlockChance <= 0 ? 0 : (depthProgress.unlockChance * 100).toFixed(0)}%
                 </p>
-                <p>Wallet: {wallet}$</p>
+
                 <Button
                     text="Depth UP"
                     onClick={() => {
@@ -86,7 +87,7 @@ const PlayerData = () => {
                         );
                     })}
                 </select>
-            </Wrapper>
+            </Container>
         </>
     );
 };

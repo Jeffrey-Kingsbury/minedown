@@ -9,7 +9,7 @@ const Resources = () => {
     const { playerData } = useContext(playerContext);
     const { items } = playerData;
     return (
-        <Wrapper>
+        <Container title='resources'>
             <Title>Raw Resources</Title>
             <Items>
                 {Object.keys(RESOURCES.dig).map((resource) => {
@@ -33,15 +33,13 @@ const Resources = () => {
                     );
                 })}
             </Items>
-        </Wrapper>
+        </Container>
     );
 };
 
 const Title = styled.p`
     margin: 0% 0 15px 0;
     font-size: larger;
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace;
     text-decoration: underline;
     text-underline-offset: 2px;
 `;
@@ -56,6 +54,7 @@ const Wrapper = styled.div`
     padding: 1rem;
     box-sizing: border-box;
     margin: 0 0 1rem 0;
+
 `;
 
 const Items = styled.div`

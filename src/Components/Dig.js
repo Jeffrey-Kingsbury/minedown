@@ -11,7 +11,7 @@ const Dig = () => {
 
     return (
         <Wrapper>
-            <ProgressBar currentProgress={currentProgress} />
+            <progress value={currentProgress > 0 ? currentProgress : null} max={100} />
             <Button
                 text={'Dig'}
                 onClick={() => {

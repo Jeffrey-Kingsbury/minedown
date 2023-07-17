@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import GameArea from './Components/GameArea';
-
+import "98.css";
 function App() {
     return (
         <Wrapper>

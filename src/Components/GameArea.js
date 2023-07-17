@@ -35,7 +35,7 @@ const GameArea = () => {
                 <Changelog setChangelogOpen={setChangelogOpen} />
             </Dialog>
             <Title>
-                Minedown
+                <span>Minedown <b>98</b></span>
                 <p
                     onClick={() => {
                         setChangelogOpen(!changelogOpen);
@@ -59,7 +59,7 @@ const GameArea = () => {
             <WideWrapper>
                 {buildings.recruiter && <Recruiter />}
 
-                <Container>
+                <Container title='unlocks'>
                     {Object.keys(BUILDINGS).map((building) => {
                         if (buildings[building]) return null;
                         if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false)
@@ -102,9 +102,16 @@ const Title = styled.h1`
     text-align: center;
     p {
         font-size: 10px;
-        text-align: right;
+        text-align: center;
         width: 100%;
         cursor: pointer;
+    }
+    span{
+        b{
+            margin: 0;
+            font-size: small;
+            position: absolute;
+        }
     }
 `;
 
