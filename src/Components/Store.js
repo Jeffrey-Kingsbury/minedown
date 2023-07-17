@@ -3,7 +3,7 @@ import Button from './Button';
 import Container from './Container';
 import { playerContext } from '../PlayerContext';
 import { styled } from 'styled-components';
-import { PLAYER_UPGRADES, PURCHASE_UPGRADE, RESOURCES, SELL_RESOURCE } from '../Engine/Engine';
+import { PLAYER_UPGRADES, RESOURCES, SELL_RESOURCE } from '../Engine/Engine';
 const Store = () => {
     const { playerData, setPlayerData, notify } = useContext(playerContext);
     const [sellQuantity, setSellQuantity] = useState(1);
@@ -12,7 +12,6 @@ const Store = () => {
         <Container title={'Store'}>
             <Outer>
                 <Wrapper>
-                    <Title>Purchase</Title>
                     <Inner>
                         {Object.keys(PLAYER_UPGRADES).map((upgrade) => {
                             if (playerData.upgrades[upgrade]) return null;
@@ -38,7 +37,6 @@ const Store = () => {
                 </Wrapper>
 
                 <Wrapper>
-                    <Title>Sell</Title>
                     <Inner>
                         {Object.keys(playerData.items).map((item) => {
                             if(playerData.items[item] < 1) return null;

@@ -118,6 +118,7 @@ const PLAYER = {
     items: {},
     buildings: {},
     upgrades: {},
+    minimized: {},
     miners: {
         qty: 0,
         gains: 1,
@@ -129,13 +130,13 @@ const PLAYER = {
 //Populate the player data object with the resources and craftables.
 Object.keys(RESOURCES.dig).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = null;
+        PLAYER.items[resource] = 1000;
     }
 });
 
 Object.keys(RESOURCES.craft).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = null;
+        PLAYER.items[resource] = 1000;
     }
 });
 
@@ -406,27 +407,27 @@ const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
 };
 
 const COLOR_PICKER = {
-    'glass': 'lightblue',
+    'glass': '#d1fff2',
     'brick': '#a30000',
-    'sand': '#e8cb4a',
-    'clay': '#bda562',
+    'sand': '#948801',
+    'clay': '#947332',
     'stone': '#707070',
     'coal': 'black',
     'iron bar': '#404040',
     'iron': '#404040',
-    'steel bar': '#a6a6a6',
+    'steel bar': '#f0f0f0',
     'bronze bar': '#a67d3d',
-    'gold bar': '#d9b514',
-    'gold': '#d9b514',
+    'gold bar': '#b59b33',
+    'gold': '#b59b33',
     'diamond': '#609bd1',
-    'tin': '#b7babd',
+    'tin': 'white',
     'copper bar': '#bf5306',
     'copper': '#bf5306',
     'mithril bar': '#00396e',
     'mithril': '#00396e',
     'adamantite bar': '#0e5227',
     'adamantite': '#0e5227',
-    'crystal shard': '#72b1b8',
+    'crystal shard': '#077858',
     'damned soul': '#a30000',
     'demon heart': '#520d0d'
 };

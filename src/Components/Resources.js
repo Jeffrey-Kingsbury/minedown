@@ -44,19 +44,6 @@ const Title = styled.p`
     text-underline-offset: 2px;
 `;
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 48%;
-    min-width: 600px;
-    min-height: 300px;
-    border: 1px solid black;
-    padding: 1rem;
-    box-sizing: border-box;
-    margin: 0 0 1rem 0;
-
-`;
-
 const Items = styled.div`
     display: flex;
     width: 80%;

@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { playerContext } from '../PlayerContext';
 import Blacksmith from './Blacksmith';
 import Button from './Button';
@@ -12,6 +12,7 @@ import { PLAYER } from '../Engine/Engine';
 import WideWrapper from './WideWrapper';
 import Changelog from './Changelog';
 import Container from './Container';
+import Minimized from './Minimized';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
@@ -29,13 +30,18 @@ const GameArea = () => {
         },
         []
     );
+
+    useEffect(() => {}, [playerData]);
+
     return (
         <Wrapper>
             <Dialog open={changelogOpen}>
                 <Changelog setChangelogOpen={setChangelogOpen} />
             </Dialog>
             <Title>
-                <span>Minedown <b>98</b></span>
+                <span>
+                    Minedown <b>98</b>
+                </span>
                 <p
                     onClick={() => {
                         setChangelogOpen(!changelogOpen);
@@ -48,35 +54,43 @@ const GameArea = () => {
             <Dig />
 
             <WideWrapper>
-                {playerData && <PlayerData />}
-                <Resources />
+                {playerData && !playerData.minimized['player data'] && <PlayerData />}
+                {!playerData.minimized['resources'] && <Resources />}
             </WideWrapper>
 
             <WideWrapper>
-                {buildings.blacksmith && <Blacksmith />}
-                {buildings.store && <Store />}
+                {buildings.blacksmith && !playerData.minimized['blacksmith'] && <Blacksmith />}
+                {buildings.store && !playerData.minimized['store'] && <Store />}
             </WideWrapper>
             <WideWrapper>
-                {buildings.recruiter && <Recruiter />}
+                {buildings.recruiter && !playerData.minimized['recruiter'] && <Recruiter />}
 
-                <Container title='unlocks'>
-                    {Object.keys(BUILDINGS).map((building) => {
-                        if (buildings[building]) return null;
-                        if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false)
-                            return null;
-                        return (
-                            <Button
-                                key={building}
-                                text={`Build a ${building} (${buildingCostString(building)})`}
-                                disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
-                                onClick={() => {
-                                    BUILD_BUILDING(playerData, setPlayerData, building, notify);
-                                }}
-                            />
-                        );
-                    })}
-                </Container>
+                {!playerData.minimized['unlocks'] && (
+                    <Container title="unlocks">
+                        {Object.keys(BUILDINGS).map((building) => {
+                            if (buildings[building]) return null;
+                            if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false)
+                                return null;
+                            return (
+                                <Button
+                                    key={building}
+                                    text={`Build a ${building} (${buildingCostString(building)})`}
+                                    disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
+                                    onClick={() => {
+                                        BUILD_BUILDING(playerData, setPlayerData, building, notify);
+                                    }}
+                                />
+                            );
+                        })}
+                    </Container>
+                )}
             </WideWrapper>
+            <MinimizedWrapper>
+                {Object.keys(playerData.minimized).map((minimized) => {
+                    if (!playerData.minimized[minimized]) return null;
+                    return <Minimized title={minimized} playerData={playerData} setPlayerData={setPlayerData} />;
+                })}
+            </MinimizedWrapper>
         </Wrapper>
     );
 };
@@ -93,6 +107,16 @@ const Wrapper = styled.div`
     align-items: center;
 `;
 
+const MinimizedWrapper = styled.div`
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap-reverse;
+    z-index: 9999;
+`;
+
 const Title = styled.h1`
     width: 100%;
     max-width: 600px;
@@ -100,18 +124,12 @@ const Title = styled.h1`
     font-family: 'Press Start', cursive;
     margin: 1rem;
     text-align: center;
+    position: relative;
     p {
         font-size: 10px;
         text-align: center;
         width: 100%;
         cursor: pointer;
-    }
-    span{
-        b{
-            margin: 0;
-            font-size: small;
-            position: absolute;
-        }
     }
 `;
 

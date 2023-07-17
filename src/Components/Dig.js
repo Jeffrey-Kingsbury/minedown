@@ -1,4 +1,3 @@
-import ProgressBar from './ProgressBar';
 import Button from './Button';
 import { useContext } from 'react';
 import { playerContext } from '../PlayerContext';
