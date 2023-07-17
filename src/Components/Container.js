@@ -2,12 +2,12 @@ import { styled } from 'styled-components';
 import Draggable from 'react-draggable';
 import { useRef, useContext } from 'react';
 import { playerContext } from '../PlayerContext';
+import {isMobile } from 'react-device-detect';
 
 const Container = ({ children, title }) => {
     const { playerData, setPlayerData } = useContext(playerContext);
     const windowRef = useRef(null);
     const setZIndex = () => {
-        //set all other windows to z-index 1
         const windows = document.querySelectorAll('.window');
         windows.forEach((window) => {
             window.style.zIndex = 100;
@@ -20,10 +20,7 @@ const Container = ({ children, title }) => {
         setPlayerData({ ...playerData, minimized: minimized });
     };
 
-    const isMobileDevice = () => {
-        return typeof window.orientation !== 'undefined' || navigator.userAgent.indexOf('IEMobile') !== -1;
-    };
-    if (isMobileDevice())
+    if (isMobile)
         return (
             <Wrapper
                 className="window"

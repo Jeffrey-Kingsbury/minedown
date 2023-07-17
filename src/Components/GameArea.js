@@ -125,6 +125,7 @@ const Title = styled.h1`
     margin: 1rem;
     text-align: center;
     position: relative;
+    color: white;
     p {
         font-size: 10px;
         text-align: center;
