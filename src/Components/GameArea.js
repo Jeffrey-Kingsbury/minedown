@@ -40,7 +40,7 @@ const GameArea = () => {
             </Dialog>
             <Title>
                 <span>
-                    Minedown <b>98</b>
+                    Minedown
                 </span>
                 <p
                     onClick={() => {
