@@ -130,13 +130,13 @@ const PLAYER = {
 //Populate the player data object with the resources and craftables.
 Object.keys(RESOURCES.dig).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = 1000;
+        PLAYER.items[resource] = null;
     }
 });
 
 Object.keys(RESOURCES.craft).forEach((resource) => {
     if (!PLAYER.items[resource]) {
-        PLAYER.items[resource] = 1000;
+        PLAYER.items[resource] = null;
     }
 });
 

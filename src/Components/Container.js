@@ -79,7 +79,8 @@ const Wrapper = styled.div`
     text-transform: capitalize;
     font-size: larger;
     resize: both !important;
-    max-width: 900px;
+    max-width: 1000px;
+    min-width: 600px;
     .title-bar {
         cursor: grab;
     }
