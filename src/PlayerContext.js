@@ -18,6 +18,7 @@ import useInterval from './use-interval.hook';
 export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+    const [loaded, setLoaded] = useState(false);
     //FOR PRODUCTION
     const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
     //FOR TESTING
@@ -100,6 +101,7 @@ export const ContextProvider = ({ children }) => {
 
         //Set the player data to match the engine format with the saved data
         setPlayerData(playerDataCopy);
+        setLoaded(true);
     }, []);
 
     useEffect(() => {
@@ -121,7 +123,10 @@ export const ContextProvider = ({ children }) => {
                 notify,
             }}
         >
-            {children}
+            <>
+            {!loaded && <p style={{width:'100vw', height:'100vh', textAlign: 'center', display:'flex', alignItems:'center', justifyContent: 'center', fontFamily:'monospace', fontSize:'2rem', color:'white', background:'#008083'}}>Now Loading...</p>}
+            {loaded && children}
+            </>
             <ToastContainer
                 position="top-right"
                 autoClose={1000}
