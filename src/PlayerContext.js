@@ -52,10 +52,16 @@ export const ContextProvider = ({ children }) => {
 
     useEffect(() => {
         const playerDataCopy = {...playerData};
+
+        //Check if version does NOT exist (alpha save data)
+        //Start fresh if it doesn't exist
         if(!playerDataCopy.version || playerDataCopy.version === undefined){
             setPlayerData(PLAYER);
             return;
         }
+
+        //Make sure the version matches the current version
+        playerDataCopy.version = PLAYER.version;
 
         //Checking for new resources that aren't in the saved data.
         Object.keys(RESOURCES.dig).forEach((resource) => {

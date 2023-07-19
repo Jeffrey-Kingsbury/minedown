@@ -1,68 +1,32 @@
 // This is the pickaxes array. It is used to store all the data about the pickaxes.
+//prettier-ignore
 const PICKAXES = [
     { name: 'Wooden pickaxe', cost: {}, digDepth: 3, reqDepth: 0, blacksmith: 'blacksmith' },
     { name: 'Stone pickaxe', cost: { stone: 10 }, digDepth: 10, reqDepth: 5, blacksmith: 'blacksmith' },
     { name: 'Iron pickaxe', cost: { 'iron bar': 10 }, digDepth: 15, reqDepth: 10, blacksmith: 'blacksmith' },
     { name: 'Steel pickaxe', cost: { 'steel bar': 15 }, digDepth: 25, reqDepth: 15, blacksmith: 'blacksmith level 2' },
-    {
-        name: 'Mithril pickaxe',
-        cost: { 'mithril bar': 25 },
-        digDepth: 50,
-        reqDepth: 25,
-        blacksmith: 'blacksmith level 3',
-    },
-    {
-        name: 'Adamantite pickaxe',
-        cost: { 'adamantite bar': 30 },
-        digDepth: 90,
-        reqDepth: 50,
-        blacksmith: 'blacksmith level 4',
-    },
+    { name: 'Mithril pickaxe', cost: { 'mithril bar': 25 }, digDepth: 50, reqDepth: 25, blacksmith: 'blacksmith level 3' },
+    { name: 'Adamantite pickaxe', cost: { 'adamantite bar': 30 }, digDepth: 90, reqDepth: 50, blacksmith: 'blacksmith level 4' },
     { name: 'Diamond pickaxe', cost: { diamond: 50 }, digDepth: 300, reqDepth: 25, blacksmith: 'blacksmith level 5' },
-    {
-        name: 'Crystal pickaxe',
-        cost: { 'crystal shard': 100 },
-        digDepth: 666,
-        reqDepth: 90,
-        blacksmith: 'blacksmith level 5',
-    },
-    {
-        name: 'Infernal pickaxe',
-        cost: { 'demon heart': 1, 'damned soul': 10 },
-        digDepth: 1000,
-        reqDepth: 125,
-        blacksmith: 'blacksmith level 6',
-    },
+    { name: 'Crystal pickaxe', cost: { 'crystal shard': 100 }, digDepth: 666, reqDepth: 90, blacksmith: 'blacksmith level 5' },
+    { name: 'Infernal pickaxe', cost: { 'demon heart': 1, 'damned soul': 10 }, digDepth: 1000, reqDepth: 125, blacksmith: 'blacksmith level 6' },
 ];
 
 // This is the buildings object. It is used to store all the data about the buildings.
+//prettier-ignore
 const BUILDINGS = {
-    blacksmith: { cost: { sand: 25, stone: 10, coal: 5 } },
-    'blacksmith level 2': {
-        cost: { 'steel bar': 100, stone: 1000, coal: 500, 'bronze bar': 100 },
-        requires: 'blacksmith',
-    },
-    'blacksmith level 3': {
-        cost: { 'mithril bar': 100, stone: 10000, coal: 5000, 'copper bar': 100 },
-        requires: 'blacksmith level 2',
-    },
-    'blacksmith level 4': {
-        cost: { 'adamantite bar': 100, stone: 25000, coal: 10000, 'copper bar': 500 },
-        requires: 'blacksmith level 3',
-    },
-    'blacksmith level 5': {
-        cost: { diamond: 100, stone: 75000, coal: 50000, 'copper bar': 5000 },
-        requires: 'blacksmith level 4',
-    },
-    'blacksmith level 6': {
-        cost: { 'damned soul': 100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 },
-        requires: 'blacksmith level 5',
-    },
-    store: { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
-    recruiter: { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
+    'blacksmith': { cost: { sand: 25, stone: 10, coal: 5 } },
+    'blacksmith level 2': { cost: { 'steel bar': 100, stone: 1000, coal: 500, 'bronze bar': 100 }, requires: 'blacksmith' },
+    'blacksmith level 3': { cost: { 'mithril bar': 100, stone: 10000, coal: 5000, 'copper bar': 100 }, requires: 'blacksmith level 2' },
+    'blacksmith level 4': { cost: { 'adamantite bar': 100, stone: 25000, coal: 10000, 'copper bar': 500 }, requires: 'blacksmith level 3' },
+    'blacksmith level 5': { cost: { diamond: 100, stone: 75000, coal: 50000, 'copper bar': 5000 }, requires: 'blacksmith level 4' },
+    'blacksmith level 6': { cost: { 'damned soul': 100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 }, requires: 'blacksmith level 5' },
+    'store': { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
+    'recruiter': { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
 };
 
 // This is the resources object. It is used to store all the data about the resources.
+//prettier-ignore
 const RESOURCES = {
     dig: {
         sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
@@ -95,7 +59,7 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-    version: '0.3',
+    version: '0.4',
     wallet: 0,
     pickaxe: 0,
     currentDepth: 1,
