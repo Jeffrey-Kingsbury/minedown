@@ -1,3 +1,10 @@
+### V-0.4
+* Added windows 98 theme
+* Added draggable windows
+* Added ability to minimize windows
+* bug fixes
+---
+
 ### V-0.3
 * Added new layout
 * Added changelog

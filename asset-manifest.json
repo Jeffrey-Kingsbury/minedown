@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.42b26620.css",
-    "main.js": "/static/js/main.7fb5f084.js",
+    "main.js": "/static/js/main.f09d7a4a.js",
     "static/media/MetalMania-Regular.ttf": "/static/media/MetalMania-Regular.3b5d2a882c4cfbed7ba5.ttf",
     "static/media/PressStart2P-Regular.ttf": "/static/media/PressStart2P-Regular.21503c6a5385ab41dde9.ttf",
     "static/media/ms_sans_serif.woff": "/static/media/ms_sans_serif.aac84aa6de42b83d1a62.woff",
@@ -9,12 +9,12 @@
     "static/media/ms_sans_serif.woff2": "/static/media/ms_sans_serif.0348082abb503fb6a8c2.woff2",
     "static/media/ms_sans_serif_bold.woff2": "/static/media/ms_sans_serif_bold.7fcf57cc6e87ecddbf64.woff2",
     "index.html": "/index.html",
-    "static/media/changelog.md": "/static/media/changelog.1fd34da665b8a92f8d68.md",
+    "static/media/changelog.md": "/static/media/changelog.9b37faf0bbe57c820663.md",
     "main.42b26620.css.map": "/static/css/main.42b26620.css.map",
-    "main.7fb5f084.js.map": "/static/js/main.7fb5f084.js.map"
+    "main.f09d7a4a.js.map": "/static/js/main.f09d7a4a.js.map"
   },
   "entrypoints": [
     "static/css/main.42b26620.css",
-    "static/js/main.7fb5f084.js"
+    "static/js/main.f09d7a4a.js"
   ]
 }
