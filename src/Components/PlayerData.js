@@ -6,11 +6,10 @@ import Container from './Container';
 
 const PlayerData = () => {
     const selectRef = useRef(null);
-    const { playerData, setPlayerData } = useContext(playerContext);
+    const { playerData, setPlayerData, diggableResourceData } = useContext(playerContext);
     const { wallet, currentDepth, maxDepth, depthProgress, upgrades } = playerData;
     const pickaxeData = PICKAXES[playerData.pickaxe];
     const [depthArray, setDepthArray] = useState([]);
-    const [resources, setResources] = useState([]);
 
     useEffect(() => {
         if (!selectRef.current) return;
@@ -22,14 +21,6 @@ const PlayerData = () => {
         setDepthArray(tempDepthArray);
     }, [playerData]);
 
-    useEffect(() => {
-        const potentialResources = Object.values(RESOURCES.dig).filter(
-            (resource) =>
-                resource.depth <= currentDepth && (resource.stopDepth >= currentDepth || resource.stopDepth === 0)
-        );
-        setResources(potentialResources);
-    }, [currentDepth]);
-
     return (
         <>
             <Container title="player data">
@@ -39,11 +30,13 @@ const PlayerData = () => {
                 <p style={{ fontFamily: 'arial, sans-serif!important' }}>Current Depth: {currentDepth}</p>
                 <span>
                     Resources at current depth:{' '}
-                    {resources.map((e, i) => {
+                    {diggableResourceData[currentDepth].map((e, i) => {
+                        //For some reason the name wasn't capitalizing when unlocking, so im brute forcing it here.
+                        let name = e.charAt(0).toUpperCase() + e.slice(1);
                         return (
-                            <span key={e.name}>
-                                <p style={{ display: 'inline', color: COLOR_PICKER[e.name] }}>{e.name}</p>
-                                {i !== resources.length - 1 && ', '}
+                            <span key={name + 'atDepth' + currentDepth}>
+                                <p style={{ display: 'inline', color: COLOR_PICKER[e] }}>{name}</p>
+                                {i !== diggableResourceData[currentDepth].length - 1 && ', '}
                             </span>
                         );
                     })}
@@ -52,7 +45,12 @@ const PlayerData = () => {
                 <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
                 <p>
                     Chance of unlocking a new depth:{' '}
-                    {depthProgress.unlockChance <= 0 ? 0 : (depthProgress.unlockChance * 1000).toFixed(0) >= 100 ? 90: (depthProgress.unlockChance * 1000).toFixed(0)}%
+                    {depthProgress.unlockChance <= 0
+                        ? 0
+                        : (depthProgress.unlockChance * 1000).toFixed(0) >= 100
+                        ? 90
+                        : (depthProgress.unlockChance * 1000).toFixed(0)}
+                    %
                 </p>
 
                 <Button
@@ -74,6 +72,7 @@ const PlayerData = () => {
                     <>
                         <p className="selectTitle">Select depth</p>
                         <select
+                            value={currentDepth}
                             ref={selectRef}
                             onChange={() => {
                                 if (selectRef.current) {

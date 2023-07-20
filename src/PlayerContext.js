@@ -19,11 +19,15 @@ export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
     const [loaded, setLoaded] = useState(false);
+    const [currentProgress, setCurrentProgress] = useState(0);
     //FOR PRODUCTION
     const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
+    const [diggableResourceData, setDiggableResourceData] = useState(
+        usePersistedState({ 1: ['sand', 'clay'] }, 'MDPResources')[0]
+    );
     //FOR TESTING
     //const [playerData, setPlayerData] = useState(PLAYER);
-    const [currentProgress, setCurrentProgress] = useState(0);
+    //const [diggableResourceData, setDiggableResourceData] = useState({ 1: ['sand', 'clay'] });
 
     const notify = (message = '', type = '') => {
         switch (type) {
@@ -47,16 +51,16 @@ export const ContextProvider = ({ children }) => {
 
     useInterval(() => {
         if (playerData.miners.qty > 0) {
-            AUTO_DIGGING(playerData, setPlayerData);
+            AUTO_DIGGING(playerData, diggableResourceData, setPlayerData);
         }
     }, 1000);
 
     useEffect(() => {
-        const playerDataCopy = {...playerData};
+        const playerDataCopy = { ...playerData };
 
         //Check if version does NOT exist (alpha save data)
         //Start fresh if it doesn't exist
-        if(!playerDataCopy.version || playerDataCopy.version === undefined){
+        if (!playerDataCopy.version || playerDataCopy.version === undefined) {
             setPlayerData(PLAYER);
             return;
         }
@@ -99,11 +103,66 @@ export const ContextProvider = ({ children }) => {
             }
         });
 
-        //Set the player data to match the engine format with the saved data
+        //Validate if all unlocked depths have resources assigned to them
+        //If not, fill them in
+        //This can happen in situations where the player has unlocked depths before this feature was added
+        const resourceDataCopy = { ...diggableResourceData };
+        // Fill missing depths in resourceDataCopy
+        for (let i = 1; i <= playerData.maxDepth + 1; i++) {
+            // If the depth doesn't exist in the resourceDataCopy, create it
+            if (!resourceDataCopy[i]) {
+                resourceDataCopy[i] = [];
+                //Go through each diggable resource and add it to the depth if it's within the depth range AND the appearanceRarity is met
+                Object.keys(RESOURCES.dig).forEach((key) => {
+                    const resource = RESOURCES.dig[key];
+                    const rand = Math.floor(Math.random() * 100) + 1;
+
+                    if (i >= resource.depth && (i <= resource.stopDepth || resource.stopDepth === 0)) {
+                        if (rand <= resource.appearanceRarity && !resourceDataCopy[i].includes(key)) {
+                            resourceDataCopy[i].push(key);
+                        }
+                    }
+                });
+            }
+        }
+
+        //Set the new data and load the game
+        setDiggableResourceData(resourceDataCopy);
         setPlayerData(playerDataCopy);
         setLoaded(true);
     }, []);
 
+    //unlocked a new depth
+    useEffect(() => {
+        //If the game has not yet loaded, return
+        if (!loaded) return;
+
+        //Prep the next depths resources
+        const resourceDataCopy = { ...diggableResourceData };
+        const depthPlusOne = playerData.maxDepth + 1;
+        //If the depth already exists, return
+        if (resourceDataCopy[depthPlusOne]) return;
+
+        //Go through each diggable resource and add it to the depth if it's within the depth range AND the appearanceRarity is met
+        Object.keys(RESOURCES.dig).forEach((key) => {
+            const resource = RESOURCES.dig[key];
+            const rand = Math.floor(Math.random() * 100) + 1;
+
+            if (depthPlusOne >= resource.depth && (depthPlusOne <= resource.stopDepth || resource.stopDepth === 0)) {
+                if (rand <= resource.appearanceRarity) {
+                    resourceDataCopy[depthPlusOne]
+                        ? resourceDataCopy[depthPlusOne].push(key)
+                        : (resourceDataCopy[depthPlusOne] = [key]);
+                }
+            }
+        });
+
+        //Save the new data
+        ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
+        setDiggableResourceData(resourceDataCopy);
+    }, [playerData.maxDepth]);
+
+    //Save the player data to local storage whenever its updated
     useEffect(() => {
         ls.set('MDPData', JSON.stringify(playerData), { isJSON: true, encrypt: false });
     }, [playerData]);
@@ -113,6 +172,7 @@ export const ContextProvider = ({ children }) => {
             value={{
                 playerData,
                 setPlayerData,
+                diggableResourceData,
                 DIGGING,
                 currentProgress,
                 setCurrentProgress,
@@ -124,8 +184,25 @@ export const ContextProvider = ({ children }) => {
             }}
         >
             <>
-            {!loaded && <p style={{width:'100vw', height:'100vh', textAlign: 'center', display:'flex', alignItems:'center', justifyContent: 'center', fontFamily:'monospace', fontSize:'2rem', color:'white', background:'#008083'}}>Now Loading...</p>}
-            {loaded && children}
+                {!loaded && (
+                    <p
+                        style={{
+                            width: '100vw',
+                            height: '100vh',
+                            textAlign: 'center',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontFamily: 'monospace',
+                            fontSize: '2rem',
+                            color: 'white',
+                            background: '#008083',
+                        }}
+                    >
+                        Now Loading...
+                    </p>
+                )}
+                {loaded && children}
             </>
             <ToastContainer
                 position="top-right"

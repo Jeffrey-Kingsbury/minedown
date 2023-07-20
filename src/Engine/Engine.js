@@ -29,20 +29,20 @@ const BUILDINGS = {
 //prettier-ignore
 const RESOURCES = {
     dig: {
-        sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
-        clay: { name: 'clay', value: 1, depth: 1, stopDepth: 2, rarity: 5 },
-        stone: { name: 'stone', value: 10, depth: 2, stopDepth: 0, rarity: 10 },
-        coal: { name: 'coal', value: 200, depth: 3, stopDepth: 300, rarity: 15 },
-        tin: { name: 'tin', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
-        copper: { name: 'copper', value: 10, depth: 5, stopDepth: 0, rarity: 10 },
-        iron: { name: 'iron', value: 500, depth: 9, stopDepth: 0, rarity: 20 },
-        gold: { name: 'gold', value: 5000, depth: 11, stopDepth: 700, rarity: 40 },
-        mithril: { name: 'mithril', value: 5000, depth: 15, stopDepth: 700, rarity: 40 },
-        adamantite: { name: 'adamantite', value: 5000, depth: 25, stopDepth: 700, rarity: 40 },
-        diamond: { name: 'diamond', value: 100000, depth: 30, stopDepth: 0, rarity: 50 },
-        'crystal shard': { name: 'crystal shard', value: 100000, depth: 150, stopDepth: 0, rarity: 50 },
-        'damned soul': { name: 'damned soul', value: 100000, depth: 450, stopDepth: 0, rarity: 100 },
-        'demon heart': { name: 'demon heart', value: 100000, depth: 666, stopDepth: 0, rarity: 5000 },
+        sand: { name: 'sand', value: 1, depth: 1, stopDepth: 2, rarity: 5, appearanceRarity: 100 },
+        clay: { name: 'clay', value: 1, depth: 1, stopDepth: 3, rarity: 5, appearanceRarity: 100 },
+        stone: { name: 'stone', value: 10, depth: 2, stopDepth: 0, rarity: 10, appearanceRarity: 100 },
+        coal: { name: 'coal', value: 200, depth: 3, stopDepth: 300, rarity: 15, appearanceRarity: 100 },
+        tin: { name: 'tin', value: 10, depth: 5, stopDepth: 0, rarity: 10, appearanceRarity: 100 },
+        copper: { name: 'copper', value: 10, depth: 5, stopDepth: 0, rarity: 10, appearanceRarity: 100 },
+        iron: { name: 'iron', value: 500, depth: 9, stopDepth: 0, rarity: 20, appearanceRarity: 100 },
+        gold: { name: 'gold', value: 5000, depth: 11, stopDepth: 700, rarity: 40, appearanceRarity: 100 },
+        mithril: { name: 'mithril', value: 5000, depth: 15, stopDepth: 700, rarity: 40, appearanceRarity: 100 },
+        adamantite: { name: 'adamantite', value: 5000, depth: 25, stopDepth: 700, rarity: 40, appearanceRarity: 100 },
+        diamond: { name: 'diamond', value: 100000, depth: 30, stopDepth: 0, rarity: 50, appearanceRarity: 100 },
+        'crystal shard': { name: 'crystal shard', value: 100000, depth: 150, stopDepth: 0, rarity: 50, appearanceRarity: 100 },
+        'damned soul': { name: 'damned soul', value: 100000, depth: 450, stopDepth: 0, rarity: 100, appearanceRarity: 100 },
+        'demon heart': { name: 'demon heart', value: 100000, depth: 666, stopDepth: 0, rarity: 5000, appearanceRarity: 100 },
     },
     craft: {
         glass: { name: 'glass', value: 10, cost: { sand: 1 } },
@@ -59,7 +59,7 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-    version: '0.4',
+    version: '0.5',
     wallet: 0,
     pickaxe: 0,
     currentDepth: 1,
@@ -104,14 +104,16 @@ Object.keys(RESOURCES.craft).forEach((resource) => {
     }
 });
 
-const DIGGING = (depth, playerData, setPlayerData, notify) => {
-    // Filter and map resources into potential resources array.
-    const potentialResources = Object.values(RESOURCES.dig)
-        .filter((resource) => resource.depth <= depth && (resource.stopDepth >= depth || resource.stopDepth === 0))
-        .map((resource) => ({
-            ...resource,
-            effectiveness: (1 / resource.rarity) * Math.log(depth / resource.depth + 1),
-        }));
+const DIGGING = (depth, playerData, diggableResourceData, setPlayerData, notify) => {
+    const diggablesAtDepth = {};
+    diggableResourceData[depth].forEach((resource) => {
+        diggablesAtDepth[resource] = RESOURCES.dig[resource];
+    });
+
+    const potentialResources = Object.values(diggablesAtDepth).map((resource) => ({
+        ...resource,
+        effectiveness: (1 / resource.rarity) * Math.log(depth / resource.depth + 1),
+    }));
 
     // Calculate the total effectiveness of all potential resources.
     const totalEffectiveness = potentialResources.reduce((sum, resource) => sum + resource.effectiveness, 0);
@@ -182,18 +184,21 @@ const DIGGING = (depth, playerData, setPlayerData, notify) => {
     });
 };
 
-const AUTO_DIGGING = (playerData, setPlayerData) => {
+const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData) => {
     let gains = 1;
     const updatedResources = { ...playerData.items };
     const depth = playerData.maxDepth;
     const minerQty = playerData.miners.qty;
     const minerUpgrades = playerData.miners.upgrades;
-    const potentialResources = Object.values(RESOURCES.dig)
-        .filter((resource) => resource.depth <= depth && (resource.stopDepth >= depth || resource.stopDepth === 0))
-        .map((resource) => ({
-            ...resource,
-            effectiveness: (1 / resource.rarity) * Math.log(depth / resource.depth + 1),
-        }));
+    const diggablesAtDepth = {};
+    diggableResourceData[depth].forEach((resource) => {
+        diggablesAtDepth[resource] = RESOURCES.dig[resource];
+    });
+
+    const potentialResources = Object.values(diggablesAtDepth).map((resource) => ({
+        ...resource,
+        effectiveness: (1 / resource.rarity) * Math.log(depth / resource.depth + 1),
+    }));
 
     // Calculate the total effectiveness of all potential resources.
     const totalEffectiveness = potentialResources.reduce((sum, resource) => sum + resource.effectiveness, 0);
@@ -371,31 +376,30 @@ const BUILD_BUILDING = (playerData, setPlayerData, building, notify) => {
 };
 
 const COLOR_PICKER = {
-    'glass': '#d1fff2',
-    'brick': '#a30000',
-    'sand': '#948801',
-    'clay': '#947332',
-    'stone': '#707070',
-    'coal': 'black',
+    glass: '#d1fff2',
+    brick: '#a30000',
+    sand: '#948801',
+    clay: '#947332',
+    stone: '#707070',
+    coal: 'black',
     'iron bar': '#404040',
-    'iron': '#404040',
+    iron: '#404040',
     'steel bar': '#f0f0f0',
     'bronze bar': '#a67d3d',
     'gold bar': '#b59b33',
-    'gold': '#b59b33',
-    'diamond': '#609bd1',
-    'tin': 'white',
+    gold: '#b59b33',
+    diamond: '#609bd1',
+    tin: 'white',
     'copper bar': '#bf5306',
-    'copper': '#bf5306',
+    copper: '#bf5306',
     'mithril bar': '#00396e',
-    'mithril': '#00396e',
+    mithril: '#00396e',
     'adamantite bar': '#0e5227',
-    'adamantite': '#0e5227',
+    adamantite: '#0e5227',
     'crystal shard': '#077858',
     'damned soul': '#a30000',
-    'demon heart': '#520d0d'
+    'demon heart': '#520d0d',
 };
-
 
 const PLAYER_UPGRADES = {
     speed1: {
