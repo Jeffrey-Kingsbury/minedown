@@ -1,3 +1,9 @@
+### V-0.5
+* Completely reworked the way the game puts resources at different depths, allowing for more randomization
+* Adjusted save data to reflect new depth system
+* Added a loading system to ensure save data is properly loaded and sanitized before the game starts (White screen fix)
+---
+
 ### V-0.4
 * Added windows 98 theme
 * Added draggable windows
