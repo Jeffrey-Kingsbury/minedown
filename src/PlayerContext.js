@@ -127,6 +127,7 @@ export const ContextProvider = ({ children }) => {
         }
 
         //Set the new data and load the game
+        ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
         setDiggableResourceData(resourceDataCopy);
         setPlayerData(playerDataCopy);
         setLoaded(true);
