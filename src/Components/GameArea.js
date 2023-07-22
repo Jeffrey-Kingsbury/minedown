@@ -13,6 +13,9 @@ import WideWrapper from './WideWrapper';
 import Changelog from './Changelog';
 import Container from './Container';
 import Minimized from './Minimized';
+import { isMobile } from 'react-device-detect';
+import Settings from '../Engine/img/settings.png';
+import Help from '../Engine/img/help.png';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
@@ -49,7 +52,12 @@ const GameArea = () => {
                 >
                     version {PLAYER.version}
                 </p>
+                <IconWrapper>
+                <Icon src={Help} alt='Open settings' />
+                <Icon src={Settings} alt='Open Help guide' />
+                </IconWrapper>
             </Title>
+
 
             <Dig />
 
@@ -119,10 +127,9 @@ const MinimizedWrapper = styled.div`
 
 const Title = styled.h1`
     width: 100%;
-    max-width: 600px;
-    font-size: 55px;
+    font-size: clamp(2.5rem, 1rem + 6vw, 3.5rem);
     font-family: 'Press Start', cursive;
-    margin: 1rem;
+    margin: 1rem 0 0 0;
     text-align: center;
     position: relative;
     color: white;
@@ -132,6 +139,24 @@ const Title = styled.h1`
         width: 100%;
         cursor: pointer;
     }
+`;
+
+const IconWrapper = styled.div`
+top: 0;
+width: 100px;
+margin: 1rem auto 0 auto;
+display: flex;
+justify-content: space-between;
+`;
+
+const Icon = styled.img`
+right: 1rem;
+width: 35px;
+cursor: pointer;
+
+&:hover {
+    transform: scale(1.1);
+}
 `;
 
 const Dialog = styled.dialog`

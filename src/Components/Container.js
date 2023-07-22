@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import Draggable from 'react-draggable';
 import { useRef, useContext } from 'react';
 import { playerContext } from '../PlayerContext';
-import {isMobile } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 
 const Container = ({ children, title }) => {
     const { playerData, setPlayerData } = useContext(playerContext);
@@ -76,8 +76,7 @@ const Wrapper = styled.div`
     text-transform: capitalize;
     font-size: larger;
     resize: both !important;
-    max-width: 1000px;
-    min-width: 600px;
+    max-width: 85dvw;
     .title-bar {
         cursor: grab;
     }

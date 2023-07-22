@@ -40,6 +40,7 @@ const Store = () => {
                     <Inner>
                         {Object.keys(playerData.items).map((item) => {
                             if(playerData.items[item] < 1) return null;
+                            if (RESOURCES.dig[item] && RESOURCES.dig[item].value <= 0) return null;
                             if (RESOURCES.dig[item]) {
                                 return (
                                     <Button

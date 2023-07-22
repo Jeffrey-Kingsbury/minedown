@@ -20,14 +20,13 @@ export const playerContext = createContext();
 export const ContextProvider = ({ children }) => {
     const [loaded, setLoaded] = useState(false);
     const [currentProgress, setCurrentProgress] = useState(0);
+    const initialDiggableResources = {  };
     //FOR PRODUCTION
     const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
-    const [diggableResourceData, setDiggableResourceData] = useState(
-        usePersistedState({ 1: ['sand', 'clay'] }, 'MDPResources')[0]
-    );
+    const [diggableResourceData, setDiggableResourceData] = useState(usePersistedState(initialDiggableResources, 'MDPResources')[0]);
     //FOR TESTING
-    //const [playerData, setPlayerData] = useState(PLAYER);
-    //const [diggableResourceData, setDiggableResourceData] = useState({ 1: ['sand', 'clay'] });
+    // const [playerData, setPlayerData] = useState(PLAYER);
+    // const [diggableResourceData, setDiggableResourceData] = useState(initialDiggableResources);
 
     const notify = (message = '', type = '') => {
         switch (type) {
@@ -106,7 +105,9 @@ export const ContextProvider = ({ children }) => {
         //Validate if all unlocked depths have resources assigned to them
         //If not, fill them in
         //This can happen in situations where the player has unlocked depths before this feature was added
-        const resourceDataCopy = { ...diggableResourceData };
+        const resourceDataCopy = playerDataCopy.depthResourceDataReset === true ? {...initialDiggableResources} : { ...diggableResourceData };
+        //playerDataCopy.depthResourceDataReset = false;
+
         // Fill missing depths in resourceDataCopy
         for (let i = 1; i <= playerData.maxDepth + 1; i++) {
             // If the depth doesn't exist in the resourceDataCopy, create it
@@ -150,7 +151,7 @@ export const ContextProvider = ({ children }) => {
             const rand = Math.floor(Math.random() * 100) + 1;
 
             if (depthPlusOne >= resource.depth && (depthPlusOne <= resource.stopDepth || resource.stopDepth === 0)) {
-                if (rand <= resource.appearanceRarity) {
+                if (rand <= resource.appearanceRarity || depthPlusOne === resource.depth) {
                     resourceDataCopy[depthPlusOne]
                         ? resourceDataCopy[depthPlusOne].push(key)
                         : (resourceDataCopy[depthPlusOne] = [key]);
