@@ -10,17 +10,20 @@ import Resources from './Resources';
 import Dig from './Dig';
 import { PLAYER } from '../Engine/Engine';
 import WideWrapper from './WideWrapper';
-import Changelog from './Changelog';
+import Changelog from './Modals/Changelog';
 import Container from './Container';
 import Minimized from './Minimized';
-import { isMobile } from 'react-device-detect';
-import Settings from '../Engine/img/settings.png';
-import Help from '../Engine/img/help.png';
+import settingsIcon from '../Engine/img/settings.png';
+import helpIcon from '../Engine/img/help.png';
+import Settings from './Modals/Settings';
+import Help from './Modals/Help';
 
 const GameArea = () => {
     const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
     const { buildings } = playerData;
     const [changelogOpen, setChangelogOpen] = useState(false);
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [helpOpen, setHelpOpen] = useState(false);
 
     const buildingCostString = useMemo(
         () => (building) => {
@@ -41,10 +44,14 @@ const GameArea = () => {
             <Dialog open={changelogOpen}>
                 <Changelog setChangelogOpen={setChangelogOpen} />
             </Dialog>
+            <Dialog open={settingsOpen}>
+                <Settings setSettingsOpen={setSettingsOpen} />
+            </Dialog>
+            <Dialog open={helpOpen}>
+                <Help setHelpOpen={setHelpOpen} />
+            </Dialog>
             <Title>
-                <span>
-                    Minedown
-                </span>
+                <span>Minedown</span>
                 <p
                     onClick={() => {
                         setChangelogOpen(!changelogOpen);
@@ -53,11 +60,22 @@ const GameArea = () => {
                     version {PLAYER.version}
                 </p>
                 <IconWrapper>
-                <Icon src={Help} alt='Open settings' />
-                <Icon src={Settings} alt='Open Help guide' />
+                    <Icon
+                        src={settingsIcon}
+                        alt="Open settings"
+                        onClick={() => {
+                            setSettingsOpen(!settingsOpen);
+                        }}
+                    />
+                    <Icon
+                        src={helpIcon}
+                        alt="Open Help guide"
+                        onClick={() => {
+                            setHelpOpen(!helpOpen);
+                        }}
+                    />
                 </IconWrapper>
             </Title>
-
 
             <Dig />
 
@@ -134,7 +152,7 @@ const Title = styled.h1`
     position: relative;
     color: white;
     p {
-        font-size: 10px;
+        font-size: xx-small;
         text-align: center;
         width: 100%;
         cursor: pointer;
@@ -142,27 +160,26 @@ const Title = styled.h1`
 `;
 
 const IconWrapper = styled.div`
-top: 0;
-width: 100px;
-margin: 1rem auto 0 auto;
-display: flex;
-justify-content: space-between;
+    top: 0;
+    width: 100px;
+    margin: 1rem auto 0 auto;
+    display: flex;
+    justify-content: space-between;
 `;
 
 const Icon = styled.img`
-right: 1rem;
-width: 35px;
-cursor: pointer;
+    right: 1rem;
+    width: 35px;
+    cursor: pointer;
 
-&:hover {
-    transform: scale(1.1);
-}
+    &:hover {
+        transform: scale(1.1);
+    }
 `;
 
 const Dialog = styled.dialog`
-    margin-top: 1rem;
-    width: 80%;
-    background-color: white;
+    background-color: transparent;
+    border: 0;
     z-index: 9999999;
 `;
 
