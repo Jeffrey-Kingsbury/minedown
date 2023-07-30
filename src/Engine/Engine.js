@@ -407,7 +407,7 @@ const PLAYER_UPGRADES = {
         name: 'Speed up',
         description: '⛏ Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
         priceString: '1000$',
-        cost: { wallet: 0 },
+        cost: { wallet: 1000 },
         isDisabled: (playerData, upgrade) => {
             let check = false;
             if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
@@ -461,7 +461,7 @@ const PLAYER_UPGRADES = {
         name: 'Strength up',
         description: '⛏ Increase your dig strength, allowing you to dig in 1 click instead of 2.',
         priceString: '100,000$',
-        cost: { wallet: 0 },
+        cost: { wallet: 100000 },
         isDisabled: (playerData, upgrade) => {
             let check = false;
             if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
