@@ -1,5 +1,5 @@
 import Container from './Container';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { playerContext } from '../PlayerContext';
 import { COLOR_PICKER } from '../Engine/Engine';
 import { styled } from 'styled-components';
@@ -8,12 +8,17 @@ import { RESOURCES } from '../Engine/Engine';
 const Resources = () => {
     const { playerData } = useContext(playerContext);
     const { items } = playerData;
+    const [allNullDug, setAllNullDug] = useState(true);
+    const [allNullCrafted, setAllNullCrafted] = useState(true);
+
     return (
         <Container title='resources'>
             <Title>Raw Resources</Title>
             <Items>
+                {allNullDug && <p>None</p>}
                 {Object.keys(RESOURCES.dig).map((resource) => {
                     if (items[resource] === null) return null;
+                    if(allNullDug) setAllNullDug(false);
                     return (
                         <p key={resource} style={{ color: COLOR_PICKER[resource] || 'black' }}>
                             {resource}: {items[resource]}
@@ -24,8 +29,11 @@ const Resources = () => {
 
             <Title>Crafted Resources</Title>
             <Items>
-                {Object.keys(RESOURCES.craft).map((resource) => {
+                {allNullCrafted && <p>None</p>}
+                {
+                Object.keys(RESOURCES.craft).map((resource) => {
                     if (items[resource] === null) return null;
+                    if(allNullCrafted) setAllNullCrafted(false);
                     return (
                         <p key={resource} style={{ color: COLOR_PICKER[resource] || 'black' }}>
                             {resource}: {items[resource]}

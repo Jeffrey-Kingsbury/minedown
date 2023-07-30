@@ -82,13 +82,8 @@ const GameArea = () => {
             <WideWrapper>
                 {playerData && !playerData.minimized['player data'] && <PlayerData />}
                 {!playerData.minimized['resources'] && <Resources />}
-            </WideWrapper>
-
-            <WideWrapper>
                 {buildings.blacksmith && !playerData.minimized['blacksmith'] && <Blacksmith />}
                 {buildings.store && !playerData.minimized['store'] && <Store />}
-            </WideWrapper>
-            <WideWrapper>
                 {buildings.recruiter && !playerData.minimized['recruiter'] && <Recruiter />}
 
                 {!playerData.minimized['unlocks'] && (

@@ -12,8 +12,9 @@ width: 100%;
 flex-wrap: wrap;
 display: flex;
 flex-direction: row;
-justify-content: space-around;
+justify-content: center;
 align-items: flex-start;
+gap: 0.25rem;
 `;
 
 export default WideWrapper;

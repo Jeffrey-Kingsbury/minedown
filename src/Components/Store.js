@@ -86,8 +86,13 @@ const Wrapper = styled.div`
     margin: 1rem;
     height: auto;
     min-height: 200px;
+    min-width: 700px;
     position: relative;
     text-transform: capitalize;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Title = styled.p`

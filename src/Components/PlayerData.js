@@ -26,8 +26,24 @@ const PlayerData = () => {
             <Container title="player data">
                 <p>Wallet: {wallet}$</p>
                 <p>Current ⛏: {pickaxeData && pickaxeData.name}</p>
+                <hr />
                 <p>Pickaxe Max Depth: {pickaxeData && pickaxeData.digDepth}</p>
-                <p style={{ fontFamily: 'arial, sans-serif!important' }}>Current Depth: {currentDepth}</p>
+                <p>Max Depth: {maxDepth}</p>
+                
+                <hr />
+                <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
+                <p>
+                    Chance of unlocking a new depth:{' '}
+                    {depthProgress.unlockChance <= 0
+                        ? 0
+                        : (depthProgress.unlockChance * 1000).toFixed(0) >= 100
+                        ? 90
+                        : (depthProgress.unlockChance * 1000).toFixed(0)}
+                    %
+                </p>
+
+                <hr />
+                <p>Current Depth: {currentDepth}</p>
                 <span>
                     Resources at current depth:{' '}
                     {diggableResourceData[currentDepth].map((e, i) => {
@@ -40,19 +56,7 @@ const PlayerData = () => {
                             </span>
                         );
                     })}
-                </span>
-                <p>Max Depth: {maxDepth}</p>
-                <p>Number of times you've dug at the max depth: {depthProgress.realDigCount}</p>
-                <p>
-                    Chance of unlocking a new depth:{' '}
-                    {depthProgress.unlockChance <= 0
-                        ? 0
-                        : (depthProgress.unlockChance * 1000).toFixed(0) >= 100
-                        ? 90
-                        : (depthProgress.unlockChance * 1000).toFixed(0)}
-                    %
-                </p>
-
+                </span><br/>
                 <Button
                     text="Depth UP"
                     onClick={() => {
@@ -68,9 +72,10 @@ const PlayerData = () => {
                     disabled={currentDepth >= maxDepth}
                 />
 
-                {!upgrades.teleport && (
+                {upgrades.teleport && (
                     <>
-                        <p className="selectTitle">Select depth</p>
+                    <hr/>
+                        <p className="selectTitle">Teleport to depth</p>
                         <select
                             value={currentDepth}
                             ref={selectRef}
