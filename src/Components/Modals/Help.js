@@ -20,38 +20,10 @@ const Help = ({ setHelpOpen }) => {
                 </div>
             </div>
             <div className="window-body">
-                <h1>The Minedown User-guide™</h1>
+                <h1>Credits & stuff</h1>
                 <hr />
-
-                <menu role="tablist">
-                    <li role="tab" aria-selected={selectedTab === 0} onClick={() => setSelectedTab(0)}>
-                        <a href="#tabs">What is Minedown?</a>
-                    </li>
-                    <li role="tab" aria-selected={selectedTab === 1} onClick={() => setSelectedTab(1)}>
-                        <a href="#tabs">Getting started</a>
-                    </li>
-                    <li role="tab" aria-selected={selectedTab === 2} onClick={() => setSelectedTab(2)}>
-                        <a href="#tabs">Pickaxes</a>
-                    </li>
-                    <li role="tab"  aria-selected={selectedTab === 3} onClick={() => setSelectedTab(3)}>
-                        <a href="#tabs">Resources</a>
-                    </li>
-                    <li role="tab"  aria-selected={selectedTab === 4} onClick={() => setSelectedTab(4)}>
-                        <a href="#tabs">Automation</a>
-                    </li>
-                    <li role="tab"  aria-selected={selectedTab === 5} onClick={() => setSelectedTab(5)}>
-                        <a href="#tabs">The store</a>
-                    </li>
-                    <li role="tab"  aria-selected={selectedTab === 6} onClick={() => setSelectedTab(6)}>
-                        <a href="#tabs">Credits</a>
-                    </li>
-                </menu>
-                <div class="window" role="tabpanel">
-                    <div class="window-body">
                         {selectedTab === 0 && <Tab0 />}
-                        {selectedTab === 1 && <Tab1 />}
-                    </div>
-                </div>
+                    
             </div>
         </Wrapper>
     );

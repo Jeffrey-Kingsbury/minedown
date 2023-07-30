@@ -59,7 +59,7 @@ const GameArea = () => {
                 >
                     version {PLAYER.version}
                 </p>
-                <IconWrapper>
+                {/* <IconWrapper>
                     <Icon
                         src={settingsIcon}
                         alt="Open settings"
@@ -74,7 +74,7 @@ const GameArea = () => {
                             setHelpOpen(!helpOpen);
                         }}
                     />
-                </IconWrapper>
+                </IconWrapper> */}
             </Title>
 
             <Dig />
