@@ -54,6 +54,7 @@ export const ContextProvider = ({ children }) => {
         }
     }, 1000);
 
+    //INITIAL LOAD
     useEffect(() => {
         const playerDataCopy = { ...playerData };
 
@@ -106,8 +107,8 @@ export const ContextProvider = ({ children }) => {
         //If not, fill them in
         //This can happen in situations where the player has unlocked depths before this feature was added
         const resourceDataCopy = playerDataCopy.depthResourceDataReset === true ? {...initialDiggableResources} : { ...diggableResourceData };
-        //playerDataCopy.depthResourceDataReset = false;
-
+        playerDataCopy.depthResourceDataReset = false;
+        
         // Fill missing depths in resourceDataCopy
         for (let i = 1; i <= playerData.maxDepth + 1; i++) {
             // If the depth doesn't exist in the resourceDataCopy, create it
@@ -119,7 +120,7 @@ export const ContextProvider = ({ children }) => {
                     const rand = Math.floor(Math.random() * 100) + 1;
 
                     if (i >= resource.depth && (i <= resource.stopDepth || resource.stopDepth === 0)) {
-                        if (rand <= resource.appearanceRarity && !resourceDataCopy[i].includes(key)) {
+                        if ((rand <= resource.appearanceRarity && !resourceDataCopy[i].includes(key)) || resource.depth === i) {
                             resourceDataCopy[i].push(key);
                         }
                     }
@@ -212,6 +213,7 @@ export const ContextProvider = ({ children }) => {
                 hideProgressBar={true}
                 newestOnTop={false}
                 closeOnClick
+                limit={3}
                 rtl={false}
                 pauseOnFocusLoss
                 draggable

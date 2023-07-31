@@ -17,11 +17,11 @@ const Resources = () => {
             <Items>
                 {allNullDug && <p>None</p>}
                 {Object.keys(RESOURCES.dig).map((resource) => {
-                    if (items[resource] === null) return null;
+                    if(items[resource] === null && RESOURCES.dig[resource].depth > playerData.maxDepth) return null;
                     if(allNullDug) setAllNullDug(false);
                     return (
                         <p key={resource} style={{ color: COLOR_PICKER[resource] || 'black' }}>
-                            {resource}: {items[resource]}
+                            {resource}: {items[resource] === null ? 0 : items[resource]}
                         </p>
                     );
                 })}

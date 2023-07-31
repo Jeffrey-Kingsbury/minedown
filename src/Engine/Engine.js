@@ -22,7 +22,7 @@ const BUILDINGS = {
     'blacksmith level 5': { cost: { diamond: 100, stone: 75000, coal: 50000, 'copper bar': 5000 }, requires: 'blacksmith level 4' },
     'blacksmith level 6': { cost: { 'damned soul': 100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 }, requires: 'blacksmith level 5' },
     'store': { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
-    'recruiter': { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 10 } },
+    'recruiter': { cost: { stone: 50, 'steel bar': 10, glass: 50, 'gold bar': 2 } },
 };
 
 // This is the resources object. It is used to store all the data about the resources.
@@ -320,7 +320,6 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
         currentResources[resource] = 0;
     } else {
         currentWallet += qty * value;
-        notify(`Sold ${qty}x ${resource} for ${qty * value}$`, 'success');
         currentResources[resource] -= qty;
     }
 
