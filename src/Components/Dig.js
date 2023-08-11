@@ -4,7 +4,7 @@ import { playerContext } from '../PlayerContext';
 import { styled } from 'styled-components';
 
 const Dig = () => {
-    const { playerData, setPlayerData, diggableResourceData, DIGGING, currentProgress, setCurrentProgress, notify } =
+    const { playerData, setPlayerData, DIGGING, currentProgress, setCurrentProgress, notify } =
         useContext(playerContext);
     const { currentDepth, digSpeed } = playerData;
 
@@ -18,7 +18,7 @@ const Dig = () => {
                         setCurrentProgress(currentProgress + digSpeed);
                     } else {
                         setCurrentProgress(0);
-                        DIGGING(currentDepth, playerData, diggableResourceData, setPlayerData, notify);
+                        DIGGING(currentDepth, playerData, playerData.diggableResourceData, setPlayerData, notify);
                     }
                 }}
             />

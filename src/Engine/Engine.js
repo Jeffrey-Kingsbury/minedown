@@ -60,7 +60,6 @@ const RESOURCES = {
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
     version: 'ALPHA 0.5',
-    depthResourceDataReset: true,
     wallet: 0,
     pickaxe: 0,
     currentDepth: 1,
@@ -70,6 +69,7 @@ const PLAYER = {
     inHell: false,
     inPurgatory: false,
     inHeaven: false,
+    diggableResourceData: {},
     depthProgress: {
         realDigCount: 0,
         digCount: 0,

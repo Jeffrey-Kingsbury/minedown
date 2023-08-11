@@ -1,12 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { playerContext } from '../PlayerContext';
-import { CHANGE_DEPTH, PICKAXES, RESOURCES, COLOR_PICKER } from '../Engine/Engine';
+import { CHANGE_DEPTH, PICKAXES, COLOR_PICKER } from '../Engine/Engine';
 import Button from './Button';
 import Container from './Container';
 
 const PlayerData = () => {
     const selectRef = useRef(null);
-    const { playerData, setPlayerData, diggableResourceData } = useContext(playerContext);
+    const { playerData, setPlayerData } = useContext(playerContext);
     const { wallet, currentDepth, maxDepth, depthProgress, upgrades } = playerData;
     const pickaxeData = PICKAXES[playerData.pickaxe];
     const [depthArray, setDepthArray] = useState([]);
@@ -46,13 +46,13 @@ const PlayerData = () => {
                 <p>Current Depth: {currentDepth}</p>
                 <span>
                     Resources at current depth:{' '}
-                    {diggableResourceData[currentDepth].map((e, i) => {
+                    {playerData.diggableResourceData[currentDepth].map((e, i) => {
                         //For some reason the name wasn't capitalizing when unlocking, so im brute forcing it here.
                         let name = e.charAt(0).toUpperCase() + e.slice(1);
                         return (
                             <span key={name + 'atDepth' + currentDepth}>
                                 <p style={{ display: 'inline', color: COLOR_PICKER[e] }}>{name}</p>
-                                {i !== diggableResourceData[currentDepth].length - 1 && ', '}
+                                {i !== playerData.diggableResourceData[currentDepth].length - 1 && ', '}
                             </span>
                         );
                     })}

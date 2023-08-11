@@ -23,7 +23,7 @@ export const ContextProvider = ({ children }) => {
     const initialDiggableResources = {  };
     //FOR PRODUCTION
     const [playerData, setPlayerData] = useState(usePersistedState(PLAYER, 'MDPData')[0]);
-    const [diggableResourceData, setDiggableResourceData] = useState(usePersistedState(initialDiggableResources, 'MDPResources')[0]);
+    // const [diggableResourceData, setDiggableResourceData] = useState(usePersistedState(initialDiggableResources, 'MDPResources')[0]);
     //FOR TESTING
     // const [playerData, setPlayerData] = useState(PLAYER);
     // const [diggableResourceData, setDiggableResourceData] = useState(initialDiggableResources);
@@ -50,7 +50,7 @@ export const ContextProvider = ({ children }) => {
 
     useInterval(() => {
         if (playerData.miners.qty > 0) {
-            AUTO_DIGGING(playerData, diggableResourceData, setPlayerData);
+            AUTO_DIGGING(playerData, playerData.diggableResourceData, setPlayerData);
         }
     }, 1000);
 
@@ -103,11 +103,7 @@ export const ContextProvider = ({ children }) => {
             }
         });
 
-        //Validate if all unlocked depths have resources assigned to them
-        //If not, fill them in
-        //This can happen in situations where the player has unlocked depths before this feature was added
-        const resourceDataCopy = playerDataCopy.depthResourceDataReset === true ? {...initialDiggableResources} : { ...diggableResourceData };
-        playerDataCopy.depthResourceDataReset = false;
+        const resourceDataCopy = playerDataCopy.diggableResourceData ;
         
         // Fill missing depths in resourceDataCopy
         for (let i = 1; i <= playerData.maxDepth + 1; i++) {
@@ -128,9 +124,11 @@ export const ContextProvider = ({ children }) => {
             }
         }
 
+        playerDataCopy.diggableResourceData = resourceDataCopy;
+
         //Set the new data and load the game
-        ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
-        setDiggableResourceData(resourceDataCopy);
+        // ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
+        // setDiggableResourceData(resourceDataCopy);
         setPlayerData(playerDataCopy);
         setLoaded(true);
     }, []);
@@ -141,7 +139,7 @@ export const ContextProvider = ({ children }) => {
         if (!loaded) return;
 
         //Prep the next depths resources
-        const resourceDataCopy = { ...diggableResourceData };
+        const resourceDataCopy = playerData.diggableResourceData;
         const depthPlusOne = playerData.maxDepth + 1;
         //If the depth already exists, return
         if (resourceDataCopy[depthPlusOne]) return;
@@ -160,9 +158,11 @@ export const ContextProvider = ({ children }) => {
             }
         });
 
+        setPlayerData({ ...playerData, diggableResourceData: resourceDataCopy });
+
         //Save the new data
-        ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
-        setDiggableResourceData(resourceDataCopy);
+        //ls.set('MDPResources', JSON.stringify(resourceDataCopy), { isJSON: true, encrypt: false });
+        //setDiggableResourceData(resourceDataCopy);
     }, [playerData.maxDepth]);
 
     //Save the player data to local storage whenever its updated
@@ -175,7 +175,6 @@ export const ContextProvider = ({ children }) => {
             value={{
                 playerData,
                 setPlayerData,
-                diggableResourceData,
                 DIGGING,
                 currentProgress,
                 setCurrentProgress,
