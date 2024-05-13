@@ -59,7 +59,7 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-	version: 'ALPHA 0.5',
+	version: 'ALPHA 0.6',
 	wallet: 0,
 	pickaxe: 0,
 	currentDepth: 1,
