@@ -1,3 +1,12 @@
+### V-ALPHA 0.7
+
+- Added 'sell X' button to store.
+- Added new mining upgrades for exponentially more resources.
+- Changes balancing on resource spawns
+- Added unlocks page to view previously unlocked upgrades
+
+---
+
 ### V-ALPHA 0.6
 
 - Completely reworked the initial balancing.

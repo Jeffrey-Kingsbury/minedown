@@ -14,9 +14,11 @@ import Changelog from './Modals/Changelog';
 import Container from './Container';
 import Minimized from './Minimized';
 import settingsIcon from '../Engine/img/settings.png';
+import keysIcon from '../Engine/img/keys-4.png';
 import helpIcon from '../Engine/img/help.png';
 import Settings from './Modals/Settings';
 import Help from './Modals/Help';
+import Unlocks from './Modals/Unlocks';
 
 const GameArea = () => {
 	const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
@@ -24,6 +26,7 @@ const GameArea = () => {
 	const [changelogOpen, setChangelogOpen] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [helpOpen, setHelpOpen] = useState(false);
+	const [unlocksOpen, setUnlocksOpen] = useState(false);
 
 	const buildingCostString = useMemo(
 		() => (building) => {
@@ -50,8 +53,14 @@ const GameArea = () => {
 			<Dialog open={helpOpen}>
 				<Help setHelpOpen={setHelpOpen} />
 			</Dialog>
+			<Dialog open={unlocksOpen}>
+				<Unlocks
+					setUnlocksOpen={setUnlocksOpen}
+					playerData={playerData}
+				/>
+			</Dialog>
 			<Title>
-				<span>Minedown95</span>
+				<span>Minedown98</span>
 				<p
 					onClick={() => {
 						setChangelogOpen(!changelogOpen);
@@ -69,17 +78,10 @@ const GameArea = () => {
 				</p>
 				<IconWrapper>
 					<Icon
-						src={settingsIcon}
-						alt='Open settings'
+						src={keysIcon}
+						alt='Open unlocks'
 						onClick={() => {
-							setSettingsOpen(!settingsOpen);
-						}}
-					/>
-					<Icon
-						src={helpIcon}
-						alt='Open Help guide'
-						onClick={() => {
-							setHelpOpen(!helpOpen);
+							setUnlocksOpen(!unlocksOpen);
 						}}
 					/>
 				</IconWrapper>

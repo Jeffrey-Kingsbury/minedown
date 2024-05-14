@@ -7,7 +7,13 @@ import { PLAYER_UPGRADES, RESOURCES, SELL_RESOURCE } from '../Engine/Engine';
 const Store = () => {
 	const { playerData, setPlayerData, notify } = useContext(playerContext);
 	const [sellQuantity, setSellQuantity] = useState(1);
-
+	const calcSellVal = (qty, value, resourceTotal) => {
+		if (qty == 'max') {
+			return (resourceTotal * value).toLocaleString('en');
+		} else {
+			return (qty * value).toLocaleString('en');
+		}
+	};
 	return (
 		<Container title={'store'}>
 			<Outer>
@@ -32,6 +38,24 @@ const Store = () => {
 					</Inner>
 				</Wrapper>
 				Sell
+				<span>
+					<Button
+						text={'1x'}
+						onClick={() => setSellQuantity(1)}
+					/>
+					<Button
+						text={'25x'}
+						onClick={() => setSellQuantity(25)}
+					/>
+					<Button
+						text={'100x'}
+						onClick={() => setSellQuantity(100)}
+					/>
+					<Button
+						text={'MAX'}
+						onClick={() => setSellQuantity('max')}
+					/>
+				</span>
 				<Wrapper>
 					<Inner>
 						{Object.keys(playerData.items).map((item) => {
@@ -41,10 +65,10 @@ const Store = () => {
 								return (
 									<Button
 										key={item}
-										text={`Sell ${sellQuantity}x ${item} for $${Number(RESOURCES.dig[item].value).toLocaleString('en')}`}
+										text={`Sell ${sellQuantity} ${item} for $${calcSellVal(sellQuantity, RESOURCES.dig[item].value, playerData.items[item])}`}
 										disabled={false}
 										onClick={() => {
-											SELL_RESOURCE(playerData, setPlayerData, item, 1, notify);
+											SELL_RESOURCE(playerData, setPlayerData, item, sellQuantity != 'max' ? sellQuantity : playerData.items[item], notify);
 										}}
 									/>
 								);
@@ -52,10 +76,10 @@ const Store = () => {
 								return (
 									<Button
 										key={item}
-										text={`Sell ${sellQuantity}x ${item} for $${Number(RESOURCES.craft[item].value).toLocaleString('en')}`}
+										text={`Sell ${sellQuantity} ${item} for $${calcSellVal(sellQuantity, RESOURCES.craft[item].value, playerData.items[item])}`}
 										disabled={false}
 										onClick={() => {
-											SELL_RESOURCE(playerData, setPlayerData, item, 1, notify);
+											SELL_RESOURCE(playerData, setPlayerData, item, sellQuantity != 'max' ? sellQuantity : playerData.items[item], notify);
 										}}
 									/>
 								);

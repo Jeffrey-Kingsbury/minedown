@@ -1,28 +1,33 @@
 import { styled } from 'styled-components';
-import { useState } from 'react';
-import Tab0 from './helptabs/Tab0';
-import Tab1 from './helptabs/Tab1';
+import { PLAYER_UPGRADES } from '../../Engine/Engine';
 
-const Help = ({ setHelpOpen }) => {
-	const [selectedTab, setSelectedTab] = useState(0);
-
+const Unlocks = ({ setUnlocksOpen, playerData }) => {
 	return (
 		<Wrapper className='window'>
 			<div className='title-bar'>
-				<div className='title-bar-text'>Help</div>
+				<div className='title-bar-text'>Unlocks</div>
 				<div className='title-bar-controls'>
 					<button
 						aria-label='Close'
 						onClick={() => {
-							setHelpOpen(false);
+							setUnlocksOpen(false);
 						}}
 					/>
 				</div>
 			</div>
 			<div className='window-body'>
-				<h1>Credits & stuff</h1>
+				<h1>Unlocks:</h1>
 				<hr />
-				{selectedTab === 0 && <Tab0 />}
+
+				{Object.entries(PLAYER_UPGRADES).map((e, i) => {
+					if (playerData.upgrades[e[0]]) {
+						return (
+							<h2>
+								{e[1].name} - {e[1].description} <hr />
+							</h2>
+						);
+					}
+				})}
 			</div>
 		</Wrapper>
 	);
@@ -30,10 +35,10 @@ const Help = ({ setHelpOpen }) => {
 
 const Wrapper = styled.div`
 	width: 100%;
-	max-width: 600px;
+	width: 600px;
 	display: flex;
 	flex-direction: column;
-	height: 70dvh;
+	max-height: 70dvh;
 
 	.window {
 		height: 100%;
@@ -55,4 +60,4 @@ const Wrapper = styled.div`
 		width: 90%;
 	}
 `;
-export default Help;
+export default Unlocks;

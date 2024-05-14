@@ -32,14 +32,14 @@ const RESOURCES = {
         sand: { name: 'sand', value: 2, depth: 1, stopDepth: 2, rarity: 5, appearanceRarity: 100},
         clay: { name: 'clay', value: 2, depth: 1, stopDepth: 3, rarity: 15, appearanceRarity: 100},
         stone: { name: 'stone', value: 5, depth: 2, stopDepth: 0, rarity: 10, appearanceRarity: 100},
-        coal: { name: 'coal', value: 10, depth: 3, stopDepth: 300, rarity: 15, appearanceRarity: 60},
-        iron: { name: 'iron', value: 15, depth: 9, stopDepth: 0, rarity: 15, appearanceRarity: 50},
-        tin: { name: 'tin', value: 10, depth: 12, stopDepth: 0, rarity: 10, appearanceRarity: 10 },
-        copper: { name: 'copper', value: 10, depth: 11, stopDepth: 0, rarity: 10, appearanceRarity: 10 },
-        gold: { name: 'gold', value: 25, depth: 11, stopDepth: 700, rarity: 40, appearanceRarity: 25 },
-        mithril: { name: 'mithril', value: 150, depth: 24, stopDepth: 700, rarity: 40, appearanceRarity: 15 },
-        adamantite: { name: 'adamantite', value: 300, depth: 49, stopDepth: 700, rarity: 40, appearanceRarity: 15 },
-        diamond: { name: 'diamond', value: 500, depth: 87, stopDepth: 0, rarity: 50, appearanceRarity: 5 },
+        coal: { name: 'coal', value: 10, depth: 3, stopDepth: 300, rarity: 15, appearanceRarity: 85},
+        iron: { name: 'iron', value: 15, depth: 9, stopDepth: 0, rarity: 15, appearanceRarity: 85},
+        tin: { name: 'tin', value: 10, depth: 12, stopDepth: 0, rarity: 10, appearanceRarity: 85 },
+        copper: { name: 'copper', value: 10, depth: 11, stopDepth: 0, rarity: 10, appearanceRarity: 85 },
+        gold: { name: 'gold', value: 25, depth: 11, stopDepth: 700, rarity: 40, appearanceRarity: 85 },
+        mithril: { name: 'mithril', value: 150, depth: 22, stopDepth: 60, rarity: 40, appearanceRarity: 80 },
+        adamantite: { name: 'adamantite', value: 300, depth: 45, stopDepth: 90, rarity: 40, appearanceRarity: 80 },
+        diamond: { name: 'diamond', value: 500, depth: 70, stopDepth: 0, rarity: 50, appearanceRarity: 20 },
         'crystal shard': { name: 'crystal shard', value: 900, depth: 150, stopDepth: 0, rarity: 50, appearanceRarity: 2 },
         'damned soul': { name: 'damned soul', value: 0, depth: 450, stopDepth: 0, rarity: 100, appearanceRarity: 25 },
         'demon heart': { name: 'demon heart', value: 0, depth: 666, stopDepth: 0, rarity: 5000, appearanceRarity: 1 },
@@ -59,7 +59,7 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-	version: 'ALPHA 0.6',
+	version: 'ALPHA 0.7',
 	wallet: 0,
 	pickaxe: 0,
 	currentDepth: 1,
@@ -83,7 +83,7 @@ const PLAYER = {
 	nerfs: {},
 	items: {},
 	buildings: {},
-	upgrades: {},
+	upgrades: { speed1: true, speed2: true, speed3: true, speed4: true, speed5: true, speed6: true, speed7: true },
 	minimized: {},
 	miners: {
 		qty: 0,
@@ -135,11 +135,33 @@ const DIGGING = (depth, playerData, diggableResourceData, setPlayerData, notify)
 	const gainedResource = randomResource();
 
 	// Update resources count
+	let gainNum = 1;
+	if (playerData.upgrades['speed3']) {
+		gainNum *= 2;
+	}
+
+	if (playerData.upgrades['speed4']) {
+		gainNum *= 2;
+	}
+
+	if (playerData.upgrades['speed5']) {
+		gainNum *= 5;
+	}
+
+	if (playerData.upgrades['speed6']) {
+		gainNum = Math.pow(gainNum, 3);
+	}
+
+	if (playerData.upgrades['speed7']) {
+		gainNum = Math.pow(gainNum, 3);
+	}
+
+	console.log(gainNum);
 	const updatedResources = {
 		...playerData.items,
-		[gainedResource.name]: playerData.items[gainedResource.name] ? playerData.items[gainedResource.name] + 1 : 1,
+		[gainedResource.name]: playerData.items[gainedResource.name] ? playerData.items[gainedResource.name] + gainNum : gainNum,
 	};
-	const updatedWallet = parseInt(playerData.wallet + gainedResource.value / 2);
+	const updatedWallet = parseInt(playerData.wallet + (gainedResource.value * gainNum) / 2);
 
 	let updatedDepthProgress = playerData.depthProgress;
 
@@ -242,7 +264,6 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 					realDigCount = 0;
 					notify('New depth unlocked', 'success');
 					updatedDepthProgress = { digCount: digcount, unlockChance: unlockChance, realDigCount: realDigCount };
-					console.log(updatedDepthProgress);
 					setPlayerData({
 						...playerData,
 						items: updatedResources,
@@ -360,6 +381,7 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
 		notify(`Sold ${currentResources[resource]}x ${resource} for ${currentResources[resource] * value}$`, 'success');
 		currentResources[resource] = 0;
 	} else {
+		console.log(qty);
 		currentWallet += qty * value;
 		currentResources[resource] -= qty;
 	}
@@ -500,8 +522,8 @@ const PLAYER_UPGRADES = {
 	speed2: {
 		name: 'Strength up',
 		description: '⛏ Increase your dig strength, allowing you to dig in 1 click instead of 2.',
-		priceString: '100,000$',
-		cost: { wallet: 100000 },
+		priceString: '10,000$',
+		cost: { wallet: 10000 },
 		isDisabled: (playerData, upgrade) => {
 			let check = false;
 			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
@@ -546,6 +568,266 @@ const PLAYER_UPGRADES = {
 				...playerData,
 				digSpeed: 101,
 				upgrades: { ...playerData.upgrades, speed2: true },
+				wallet: wallet,
+				items: currentItems,
+			});
+		},
+	},
+	speed3: {
+		name: 'Double up',
+		description: '⛏ Double the amount of resources you gain from manually digging',
+		priceString: '100,000$',
+		cost: { wallet: 100000 },
+		isDisabled: (playerData, upgrade) => {
+			let check = false;
+			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+				check = true;
+			}
+
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+				});
+			}
+			return check;
+		},
+		unlockRequirement: (playerData) => {
+			if (playerData.totalDigs >= 0 && playerData.upgrades.speed2) return true;
+			return false;
+		},
+		upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+			const cost = PLAYER_UPGRADES[upgrade].cost;
+			const currentItems = { ...playerData.items };
+			let wallet = playerData.wallet;
+			let check = false;
+
+			if (cost.wallet > wallet) return;
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+					currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+				});
+			}
+			if (check) return;
+			wallet -= cost.wallet;
+			notify("I'll have a Double Double ☕", 'success');
+			setPlayerData({
+				...playerData,
+				upgrades: { ...playerData.upgrades, speed3: true },
+				wallet: wallet,
+				items: currentItems,
+			});
+		},
+	},
+	speed4: {
+		name: 'Double up again',
+		description: '⛏ Double the amount of resources you gain from manually digging again',
+		priceString: '200,000$',
+		cost: { wallet: 200000 },
+		isDisabled: (playerData, upgrade) => {
+			let check = false;
+			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+				check = true;
+			}
+
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+				});
+			}
+			return check;
+		},
+		unlockRequirement: (playerData) => {
+			if (playerData.totalDigs >= 0 && playerData.upgrades.speed3) return true;
+			return false;
+		},
+		upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+			const cost = PLAYER_UPGRADES[upgrade].cost;
+			const currentItems = { ...playerData.items };
+			let wallet = playerData.wallet;
+			let check = false;
+
+			if (cost.wallet > wallet) return;
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+					currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+				});
+			}
+			if (check) return;
+			wallet -= cost.wallet;
+			notify("I'll have another Double Double ☕", 'success');
+			setPlayerData({
+				...playerData,
+				upgrades: { ...playerData.upgrades, speed4: true },
+				wallet: wallet,
+				items: currentItems,
+			});
+		},
+	},
+	speed5: {
+		name: 'multiply it',
+		description: '⛏ multiply the amount of resources you gain from manually digging by 5',
+		priceString: '500,000$',
+		cost: { wallet: 500000 },
+		isDisabled: (playerData, upgrade) => {
+			let check = false;
+			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+				check = true;
+			}
+
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+				});
+			}
+			return check;
+		},
+		unlockRequirement: (playerData) => {
+			if (playerData.totalDigs >= 0 && playerData.upgrades.speed4) return true;
+			return false;
+		},
+		upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+			const cost = PLAYER_UPGRADES[upgrade].cost;
+			const currentItems = { ...playerData.items };
+			let wallet = playerData.wallet;
+			let check = false;
+
+			if (cost.wallet > wallet) return;
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+					currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+				});
+			}
+			if (check) return;
+			wallet -= cost.wallet;
+			notify('Lets goooo', 'success');
+			setPlayerData({
+				...playerData,
+				upgrades: { ...playerData.upgrades, speed5: true },
+				wallet: wallet,
+				items: currentItems,
+			});
+		},
+	},
+	speed6: {
+		name: 'POWer up',
+		description: '⛏ get ^3 amount of resources you gain from manually digging',
+		priceString: '1,000,000$',
+		cost: { wallet: 1000000 },
+		isDisabled: (playerData, upgrade) => {
+			let check = false;
+			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+				check = true;
+			}
+
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+				});
+			}
+			return check;
+		},
+		unlockRequirement: (playerData) => {
+			if (playerData.totalDigs >= 0 && playerData.upgrades.speed5) return true;
+			return false;
+		},
+		upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+			const cost = PLAYER_UPGRADES[upgrade].cost;
+			const currentItems = { ...playerData.items };
+			let wallet = playerData.wallet;
+			let check = false;
+
+			if (cost.wallet > wallet) return;
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+					currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+				});
+			}
+			if (check) return;
+			wallet -= cost.wallet;
+			notify("Now you're playing with POWer", 'success');
+			setPlayerData({
+				...playerData,
+				upgrades: { ...playerData.upgrades, speed6: true },
+				wallet: wallet,
+				items: currentItems,
+			});
+		},
+	},
+	speed7: {
+		name: 'MORE',
+		description: '⛏ get an additional ^3 amount of resource gain from manually digging',
+		priceString: '10,000,000$',
+		cost: { wallet: 10000000 },
+		isDisabled: (playerData, upgrade) => {
+			let check = false;
+			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
+				check = true;
+			}
+
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (playerData.items[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+				});
+			}
+			return check;
+		},
+		unlockRequirement: (playerData) => {
+			if (playerData.totalDigs >= 0 && playerData.upgrades.speed6) return true;
+			return false;
+		},
+		upgradeFunction: (playerData, setPlayerData, upgrade, notify) => {
+			const cost = PLAYER_UPGRADES[upgrade].cost;
+			const currentItems = { ...playerData.items };
+			let wallet = playerData.wallet;
+			let check = false;
+
+			if (cost.wallet > wallet) return;
+			if (PLAYER_UPGRADES[upgrade].cost.resource && check === false) {
+				Object.keys(PLAYER_UPGRADES[upgrade].cost.resource).forEach((resource) => {
+					if (check) return;
+					if (currentItems[resource] < PLAYER_UPGRADES[upgrade].cost.resource[resource]) {
+						check = true;
+					}
+					currentItems[resource] -= PLAYER_UPGRADES[upgrade].cost.resource[resource];
+				});
+			}
+			if (check) return;
+			wallet -= cost.wallet;
+			notify('MORE', 'success');
+			setPlayerData({
+				...playerData,
+				upgrades: { ...playerData.upgrades, speed7: true },
 				wallet: wallet,
 				items: currentItems,
 			});
