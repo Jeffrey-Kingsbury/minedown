@@ -83,7 +83,7 @@ const PLAYER = {
 	nerfs: {},
 	items: {},
 	buildings: {},
-	upgrades: { speed1: true, speed2: true, speed3: true, speed4: true, speed5: true, speed6: true, speed7: true },
+	upgrades: {},
 	minimized: {},
 	miners: {
 		qty: 0,
