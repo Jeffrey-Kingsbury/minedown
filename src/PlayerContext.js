@@ -40,7 +40,7 @@ export const ContextProvider = ({ children }) => {
 	};
 
 	useInterval(() => {
-		if (playerData.miners.qty > 0) {
+		if (playerData.miners.miner > 0) {
 			AUTO_DIGGING(playerData, playerData.diggableResourceData, setPlayerData, notify);
 		}
 	}, playerData.auto_interval);

@@ -68,14 +68,7 @@ const GameArea = () => {
 				>
 					version {PLAYER.version}
 				</p>
-				<p
-					onClick={() => {
-						localStorage.clear();
-						window.location.reload();
-					}}
-				>
-					RESET
-				</p>
+
 				<IconWrapper>
 					<Icon
 						src={keysIcon}
@@ -84,7 +77,20 @@ const GameArea = () => {
 							setUnlocksOpen(!unlocksOpen);
 						}}
 					/>
+
+					<Icon
+						src={settingsIcon}
+						alt='Open settings'
+						onClick={() => {
+							setSettingsOpen(!settingsOpen);
+						}}
+					/>
 				</IconWrapper>
+				<WalletDisplay>
+					<hr />
+					Cash: {playerData.wallet > 99999999999999 ? Number(playerData.wallet).toExponential(2) : Number(playerData.wallet).toLocaleString()}$
+					<hr />
+				</WalletDisplay>
 			</Title>
 
 			<Dig />
@@ -166,6 +172,16 @@ const Title = styled.h1`
 		text-align: center;
 		width: 100%;
 		cursor: pointer;
+	}
+`;
+
+const WalletDisplay = styled.h1`
+	color: white;
+	padding-top: 2rem;
+	width: auto;
+	box-sizing: border-box;
+	hr {
+		max-width: 50%;
 	}
 `;
 

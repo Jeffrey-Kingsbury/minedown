@@ -86,9 +86,8 @@ const PLAYER = {
 	upgrades: {},
 	minimized: {},
 	miners: {
-		qty: 0,
-		gains: 1,
-		depth: 1,
+		miner: 0,
+		excavator: 0,
 	},
 };
 
@@ -156,7 +155,6 @@ const DIGGING = (depth, playerData, diggableResourceData, setPlayerData, notify)
 		gainNum = Math.pow(gainNum, 3);
 	}
 
-	console.log(gainNum);
 	const updatedResources = {
 		...playerData.items,
 		[gainedResource.name]: playerData.items[gainedResource.name] ? playerData.items[gainedResource.name] + gainNum : gainNum,
@@ -211,11 +209,10 @@ const DIGGING = (depth, playerData, diggableResourceData, setPlayerData, notify)
 };
 
 const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) => {
-	const gains = 1;
 	const updatedResources = { ...playerData.items };
 	const depth = playerData.currentDepth;
-	const minerQty = playerData.miners.qty;
-	const minerUpgrades = playerData.miners.upgrades;
+	const minerQty = playerData.miners.miner;
+	const excavatorQty = playerData.miners.excavator;
 	const diggablesAtDepth = {};
 	diggableResourceData[depth].forEach((resource) => {
 		diggablesAtDepth[resource] = RESOURCES.dig[resource];
@@ -245,9 +242,16 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 	let gainedMoney = 0;
 	for (let x = 0; x < minerQty; x++) {
 		const gainedResource = randomResource();
-		updatedResources[gainedResource.name] = updatedResources[gainedResource.name] ? updatedResources[gainedResource.name] + gains : 1;
+		updatedResources[gainedResource.name] = updatedResources[gainedResource.name] ? updatedResources[gainedResource.name] + 1 : 1;
 		gainedMoney += parseInt(gainedResource.value / 4);
 	}
+
+	for (let x = 0; x < excavatorQty; x++) {
+		const gainedResource = randomResource();
+		updatedResources[gainedResource.name] = updatedResources[gainedResource.name] ? updatedResources[gainedResource.name] + 100 : 100;
+		gainedMoney += parseInt((gainedResource.value / 4) * 100);
+	}
+
 	const updatedWallet = playerData.wallet + gainedMoney;
 	let updatedDepthProgress = playerData.depthProgress;
 
@@ -256,26 +260,25 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 		let realDigCount = playerData.depthProgress.realDigCount + 1;
 		let unlockChance = (digcount - 10) / (playerData.currentDepth * 100);
 		if (playerData.currentDepth === playerData.maxDepth) {
-			if (PICKAXES[playerData.pickaxe].digDepth > playerData.currentDepth) {
-				digcount++;
-				if (Math.random() < unlockChance) {
-					digcount = 0;
-					unlockChance = 0;
-					realDigCount = 0;
-					notify('New depth unlocked', 'success');
-					updatedDepthProgress = { digCount: digcount, unlockChance: unlockChance, realDigCount: realDigCount };
-					setPlayerData({
-						...playerData,
-						items: updatedResources,
-						wallet: updatedWallet,
-						depthProgress: updatedDepthProgress,
-						maxDepth: playerData.maxDepth + 1,
-						currentDepth: playerData.currentDepth + 1,
-						totalDigs: playerData.totalDigs + 1,
-					});
-					return;
-				}
+			digcount++;
+			if (Math.random() < unlockChance) {
+				digcount = 0;
+				unlockChance = 0;
+				realDigCount = 0;
+				notify('New depth unlocked', 'success');
+				updatedDepthProgress = { digCount: digcount, unlockChance: unlockChance, realDigCount: realDigCount };
+				setPlayerData({
+					...playerData,
+					items: updatedResources,
+					wallet: updatedWallet,
+					depthProgress: updatedDepthProgress,
+					maxDepth: playerData.maxDepth + 1,
+					currentDepth: playerData.currentDepth + 1,
+					totalDigs: playerData.totalDigs + 1,
+				});
+				return;
 			}
+
 			updatedDepthProgress = {
 				...playerData.depthProgress,
 				digCount: digcount,
@@ -347,19 +350,32 @@ const CHANGE_DEPTH = (playerData, setPlayerData, depth) => {
 };
 
 //WIP
-const HIRE_MINER = (playerData, setPlayerData, price) => {
-	setPlayerData({
-		...playerData,
-		miners: {
-			...playerData.miners,
-			qty: playerData.miners.qty + 1,
-		},
-		wallet: playerData.wallet - price,
-	});
-};
+const HIRE_MINER = (playerData, setPlayerData, price, qty, type) => {
+	let minerData = playerData.miners;
+	switch (type) {
+		case 'miner':
+			setPlayerData({
+				...playerData,
+				miners: {
+					...playerData.miners,
+					miner: playerData.miners.miner + 1,
+				},
+				wallet: playerData.wallet - price,
+			});
+			break;
 
-//WIP
-const UPGRADE_MINER = (currentMiners, resources) => {};
+		case 'excavator':
+			setPlayerData({
+				...playerData,
+				miners: {
+					...playerData.miners,
+					excavator: playerData.miners.excavator + 1,
+				},
+				wallet: playerData.wallet - price,
+			});
+			break;
+	}
+};
 
 //WIP
 const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => {
@@ -381,7 +397,6 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => 
 		notify(`Sold ${currentResources[resource]}x ${resource} for ${currentResources[resource] * value}$`, 'success');
 		currentResources[resource] = 0;
 	} else {
-		console.log(qty);
 		currentWallet += qty * value;
 		currentResources[resource] -= qty;
 	}
@@ -898,7 +913,6 @@ export {
 	CRAFT_ITEM,
 	CHANGE_DEPTH,
 	HIRE_MINER,
-	UPGRADE_MINER,
 	SELL_RESOURCE,
 	CHECK_DISABLED,
 	BUILD_BUILDING,
