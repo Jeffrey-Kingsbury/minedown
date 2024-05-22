@@ -97,6 +97,24 @@ const GameArea = () => {
 				</WalletDisplay>
 			</Title>
 
+			{pause && (
+				<p
+					style={{
+						width: '100vw',
+						height: '100vh',
+						textAlign: 'center',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						fontFamily: 'monospace',
+						fontSize: '2rem',
+						color: 'white',
+						background: '#008083',
+					}}
+				>
+					Paused
+				</p>
+			)}
 			{!pause && (
 				<>
 					<Dig />

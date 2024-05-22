@@ -468,7 +468,7 @@ const COLOR_PICKER = {
 const PLAYER_UPGRADES = {
 	speed1: {
 		name: 'Speed up',
-		description: '⛏ Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
+		description: '⛏️ Increase your dig speed, allowing you to dig in 2 clicks instead of 3.',
 		priceString: '1000$',
 		cost: { wallet: 1000 },
 		isDisabled: (playerData, upgrade) => {
@@ -522,7 +522,7 @@ const PLAYER_UPGRADES = {
 	},
 	speed2: {
 		name: 'Strength up',
-		description: '⛏ Increase your dig strength, allowing you to dig in 1 click instead of 2.',
+		description: '⛏️ Increase your dig strength, allowing you to dig in 1 click instead of 2.',
 		priceString: '10,000$',
 		cost: { wallet: 10000 },
 		isDisabled: (playerData, upgrade) => {
@@ -576,7 +576,7 @@ const PLAYER_UPGRADES = {
 	},
 	speed3: {
 		name: 'Double up',
-		description: '⛏ Double the amount of resources you gain from manually digging',
+		description: '⛏️ Double the amount of resources you gain from manually digging',
 		priceString: '100,000$',
 		cost: { wallet: 100000 },
 		isDisabled: (playerData, upgrade) => {
@@ -628,7 +628,7 @@ const PLAYER_UPGRADES = {
 	},
 	speed4: {
 		name: 'Double up again',
-		description: '⛏ Double the amount of resources you gain from manually digging again',
+		description: '⛏️ Double the amount of resources you gain from manually digging again',
 		priceString: '200,000$',
 		cost: { wallet: 200000 },
 		isDisabled: (playerData, upgrade) => {
@@ -680,7 +680,7 @@ const PLAYER_UPGRADES = {
 	},
 	speed5: {
 		name: 'multiply it',
-		description: '⛏ multiply the amount of resources you gain from manually digging by 5',
+		description: '⛏️ multiply the amount of resources you gain from manually digging by 5',
 		priceString: '500,000$',
 		cost: { wallet: 500000 },
 		isDisabled: (playerData, upgrade) => {
@@ -732,7 +732,7 @@ const PLAYER_UPGRADES = {
 	},
 	speed6: {
 		name: 'POWer up',
-		description: '⛏ get ^3 amount of resources you gain from manually digging',
+		description: '⛏️ get ^3 amount of resources you gain from manually digging',
 		priceString: '1,000,000$',
 		cost: { wallet: 1000000 },
 		isDisabled: (playerData, upgrade) => {
@@ -784,9 +784,9 @@ const PLAYER_UPGRADES = {
 	},
 	speed7: {
 		name: 'MORE',
-		description: '⛏ get an additional ^3 amount of resource gain from manually digging',
-		priceString: '10,000,000$',
-		cost: { wallet: 10000000 },
+		description: '⛏️ get an additional ^3 amount of resource gain from manually digging',
+		priceString: '100,000,000$',
+		cost: { wallet: 100000000 },
 		isDisabled: (playerData, upgrade) => {
 			let check = false;
 			if (PLAYER_UPGRADES[upgrade].cost.wallet > playerData.wallet) {
@@ -836,7 +836,7 @@ const PLAYER_UPGRADES = {
 	},
 	autodepth: {
 		name: 'auto depth',
-		description: 'Enables the miners to unlock new depths.',
+		description: '🤖 Enables the miners to unlock new depths.',
 		priceString: '10,000$',
 		cost: { wallet: 10000 },
 		isDisabled: (playerData, upgrade) => {
