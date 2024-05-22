@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-const Settings = ({ setSettingsOpen }) => {
+const Settings = ({ setSettingsOpen, setPause }) => {
 	return (
 		<Wrapper className='window'>
 			<div className='title-bar'>
@@ -10,6 +10,7 @@ const Settings = ({ setSettingsOpen }) => {
 						aria-label='Close'
 						onClick={() => {
 							setSettingsOpen(false);
+							setPause(false);
 						}}
 					/>
 				</div>

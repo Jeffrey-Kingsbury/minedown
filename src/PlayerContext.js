@@ -9,6 +9,7 @@ import useInterval from './use-interval.hook';
 export const playerContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+	const [pause, setPause] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const [currentProgress, setCurrentProgress] = useState(0);
 	const initialDiggableResources = {};
@@ -40,7 +41,7 @@ export const ContextProvider = ({ children }) => {
 	};
 
 	useInterval(() => {
-		if (playerData.miners.miner > 0) {
+		if (playerData.miners.miner > 0 && !pause) {
 			AUTO_DIGGING(playerData, playerData.diggableResourceData, setPlayerData, notify);
 		}
 	}, playerData.auto_interval);
@@ -164,6 +165,8 @@ export const ContextProvider = ({ children }) => {
 			value={{
 				playerData,
 				setPlayerData,
+				pause,
+				setPause,
 				DIGGING,
 				currentProgress,
 				setCurrentProgress,

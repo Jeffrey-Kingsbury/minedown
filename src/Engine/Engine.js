@@ -21,7 +21,7 @@ const BUILDINGS = {
     'blacksmith level 4': { cost: { 'adamantite bar': 100, stone: 25000, coal: 10000, 'copper bar': 500 }, requires: 'blacksmith level 3' },
     'blacksmith level 5': { cost: { diamond: 100, stone: 75000, coal: 50000, 'copper bar': 5000 }, requires: 'blacksmith level 4' },
     'blacksmith level 6': { cost: { 'damned soul': 100000, stone: 7500000, coal: 5000000, 'copper bar': 500000, 'demon heart': 1 }, requires: 'blacksmith level 5' },
-    'store': { cost: { stone: 50, 'iron bar': 10, glass: 25 } },
+    'store': { cost: { stone: 50, brick: 25, glass: 25 } },
 
 };
 
@@ -59,7 +59,7 @@ const RESOURCES = {
 
 // This is the player data object. It is used to store all the data about the player.
 const PLAYER = {
-	version: 'ALPHA 0.7',
+	version: 'ALPHA 0.8',
 	wallet: 0,
 	pickaxe: 0,
 	currentDepth: 1,
@@ -85,10 +85,7 @@ const PLAYER = {
 	buildings: {},
 	upgrades: {},
 	minimized: {},
-	miners: {
-		miner: 0,
-		excavator: 0,
-	},
+	miners: {},
 };
 
 //Populate the player data object with the resources and craftables.
@@ -213,6 +210,7 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 	const depth = playerData.currentDepth;
 	const minerQty = playerData.miners.miner;
 	const excavatorQty = playerData.miners.excavator;
+	const earthmoverQty = playerData.miners.earthmover;
 	const diggablesAtDepth = {};
 	diggableResourceData[depth].forEach((resource) => {
 		diggablesAtDepth[resource] = RESOURCES.dig[resource];
@@ -250,6 +248,12 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 		const gainedResource = randomResource();
 		updatedResources[gainedResource.name] = updatedResources[gainedResource.name] ? updatedResources[gainedResource.name] + 100 : 100;
 		gainedMoney += parseInt((gainedResource.value / 4) * 100);
+	}
+
+	for (let x = 0; x < earthmoverQty; x++) {
+		const gainedResource = randomResource();
+		updatedResources[gainedResource.name] = updatedResources[gainedResource.name] ? updatedResources[gainedResource.name] + 1000 : 1000;
+		gainedMoney += parseInt((gainedResource.value / 4) * 1000);
 	}
 
 	const updatedWallet = playerData.wallet + gainedMoney;
@@ -349,36 +353,18 @@ const CHANGE_DEPTH = (playerData, setPlayerData, depth) => {
 	setPlayerData({ ...playerData, currentDepth: depth });
 };
 
-//WIP
 const HIRE_MINER = (playerData, setPlayerData, price, qty, type) => {
-	let minerData = playerData.miners;
-	switch (type) {
-		case 'miner':
-			setPlayerData({
-				...playerData,
-				miners: {
-					...playerData.miners,
-					miner: playerData.miners.miner + 1,
-				},
-				wallet: playerData.wallet - price,
-			});
-			break;
-
-		case 'excavator':
-			setPlayerData({
-				...playerData,
-				miners: {
-					...playerData.miners,
-					excavator: playerData.miners.excavator + 1,
-				},
-				wallet: playerData.wallet - price,
-			});
-			break;
-	}
+	setPlayerData({
+		...playerData,
+		miners: {
+			...playerData.miners,
+			[type]: playerData.miners[type] ? playerData.miners[type] + qty : qty,
+		},
+		wallet: playerData.wallet - price,
+	});
 };
 
-//WIP
-const SELL_RESOURCE = (playerData, setPlayerData, resource, qty = 1, notify) => {
+const SELL_RESOURCE = (playerData, setPlayerData, resource, qty, notify) => {
 	if (!RESOURCES.dig[resource] && !RESOURCES.craft[resource]) {
 		notify(`Error: Resource '${resource}' does not exist.`, 'error');
 		return;

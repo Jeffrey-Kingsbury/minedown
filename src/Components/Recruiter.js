@@ -9,6 +9,7 @@ const Recruiter = () => {
 	const { playerData, setPlayerData, notify } = useContext(playerContext);
 	const minerPrice = playerData.miners.miner > 0 ? (5 * Math.pow(1.07, playerData.miners.miner)).toFixed(0) : 5;
 	const excavatorPrice = playerData.miners.excavator > 0 ? (100 * Math.pow(1.07, playerData.miners.excavator)).toFixed(0) : 100;
+	const earthmoverPrice = playerData.miners.earthmover > 0 ? (20000 * Math.pow(1.07, playerData.miners.earthmover)).toFixed(0) : 20000;
 
 	return (
 		<Container title={'recruiter'}>
@@ -38,6 +39,23 @@ const Recruiter = () => {
 								}
 							}}
 							disabled={playerData.wallet < excavatorPrice}
+						/>
+					</span>
+				)}
+
+				{playerData.miners.excavator >= 150 && (
+					<span>
+						Total Earth movers: {playerData.miners.earthmover ? playerData.miners.earthmover : 0}
+						<Button
+							text={`Hire Earth mover (${
+								earthmoverPrice > 99999999999999 ? Number(earthmoverPrice).toExponential(2) : Number(earthmoverPrice).toLocaleString()
+							}$)`}
+							onClick={() => {
+								if (playerData.wallet >= earthmoverPrice) {
+									HIRE_MINER(playerData, setPlayerData, earthmoverPrice, 1, 'earthmover');
+								}
+							}}
+							disabled={playerData.wallet < earthmoverPrice}
 						/>
 					</span>
 				)}

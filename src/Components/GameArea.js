@@ -21,7 +21,7 @@ import Help from './Modals/Help';
 import Unlocks from './Modals/Unlocks';
 
 const GameArea = () => {
-	const { playerData, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
+	const { playerData, pause, setPause, setPlayerData, CHECK_DISABLED, BUILD_BUILDING, BUILDINGS, notify } = useContext(playerContext);
 	const { buildings } = playerData;
 	const [changelogOpen, setChangelogOpen] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
@@ -48,7 +48,10 @@ const GameArea = () => {
 				<Changelog setChangelogOpen={setChangelogOpen} />
 			</Dialog>
 			<Dialog open={settingsOpen}>
-				<Settings setSettingsOpen={setSettingsOpen} />
+				<Settings
+					setSettingsOpen={setSettingsOpen}
+					setPause={setPause}
+				/>
 			</Dialog>
 			<Dialog open={helpOpen}>
 				<Help setHelpOpen={setHelpOpen} />
@@ -83,6 +86,7 @@ const GameArea = () => {
 						alt='Open settings'
 						onClick={() => {
 							setSettingsOpen(!settingsOpen);
+							setPause(true);
 						}}
 					/>
 				</IconWrapper>
@@ -93,46 +97,49 @@ const GameArea = () => {
 				</WalletDisplay>
 			</Title>
 
-			<Dig />
+			{!pause && (
+				<>
+					<Dig />
+					<WideWrapper>
+						{playerData && !playerData.minimized['player data'] && <PlayerData />}
+						{!playerData.minimized['resources'] && <Resources />}
+						{buildings.blacksmith && !playerData.minimized['blacksmith'] && <Blacksmith />}
+						{buildings.store && !playerData.minimized['store'] && <Store />}
+						{!playerData.minimized['recruiter'] && <Recruiter />}
 
-			<WideWrapper>
-				{playerData && !playerData.minimized['player data'] && <PlayerData />}
-				{!playerData.minimized['resources'] && <Resources />}
-				{buildings.blacksmith && !playerData.minimized['blacksmith'] && <Blacksmith />}
-				{buildings.store && !playerData.minimized['store'] && <Store />}
-				{!playerData.minimized['recruiter'] && <Recruiter />}
-
-				{!playerData.minimized['unlocks'] && (
-					<Container title='unlocks'>
-						{Object.keys(BUILDINGS).map((building) => {
-							if (buildings[building]) return null;
-							if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
+						{!playerData.minimized['unlocks'] && (
+							<Container title='unlocks'>
+								{Object.keys(BUILDINGS).map((building) => {
+									if (buildings[building]) return null;
+									if (BUILDINGS[building].requires ? !buildings[BUILDINGS[building].requires] : false) return null;
+									return (
+										<Button
+											key={building}
+											text={`Build a ${building} (${buildingCostString(building)})`}
+											disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
+											onClick={() => {
+												BUILD_BUILDING(playerData, setPlayerData, building, notify);
+											}}
+										/>
+									);
+								})}
+							</Container>
+						)}
+					</WideWrapper>
+					<MinimizedWrapper>
+						{Object.keys(playerData.minimized).map((minimized) => {
+							if (!playerData.minimized[minimized]) return null;
 							return (
-								<Button
-									key={building}
-									text={`Build a ${building} (${buildingCostString(building)})`}
-									disabled={CHECK_DISABLED(playerData, BUILDINGS[building].cost)}
-									onClick={() => {
-										BUILD_BUILDING(playerData, setPlayerData, building, notify);
-									}}
+								<Minimized
+									title={minimized}
+									playerData={playerData}
+									setPlayerData={setPlayerData}
 								/>
 							);
 						})}
-					</Container>
-				)}
-			</WideWrapper>
-			<MinimizedWrapper>
-				{Object.keys(playerData.minimized).map((minimized) => {
-					if (!playerData.minimized[minimized]) return null;
-					return (
-						<Minimized
-							title={minimized}
-							playerData={playerData}
-							setPlayerData={setPlayerData}
-						/>
-					);
-				})}
-			</MinimizedWrapper>
+					</MinimizedWrapper>
+				</>
+			)}
 		</Wrapper>
 	);
 };
