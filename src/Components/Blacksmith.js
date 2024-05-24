@@ -62,6 +62,18 @@ const Blacksmith = () => {
 						setQty(100);
 					}}
 				/>
+				<Button
+					text={'1000x'}
+					onClick={() => {
+						setQty(1000);
+					}}
+				/>
+				<Button
+					text={'10000x'}
+					onClick={() => {
+						setQty(10000);
+					}}
+				/>
 			</span>
 			<hr />
 			<div>
