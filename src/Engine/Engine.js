@@ -263,7 +263,7 @@ const AUTO_DIGGING = (playerData, diggableResourceData, setPlayerData, notify) =
 		let digcount = playerData.depthProgress.digCount;
 		let realDigCount = playerData.depthProgress.realDigCount + 1;
 		let unlockChance = (digcount - 10) / (playerData.currentDepth * 100);
-		if (playerData.currentDepth === playerData.maxDepth) {
+		if (playerData.currentDepth === playerData.maxDepth && PICKAXES[playerData.pickaxe].digDepth > playerData.currentDepth) {
 			digcount++;
 			if (Math.random() < unlockChance) {
 				digcount = 0;
