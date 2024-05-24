@@ -325,7 +325,7 @@ const UPGRADE_PICKAXE = (setPlayerData, playerData, notify) => {
 };
 
 // Function to craft an item
-const CRAFT_ITEM = (bar, playerData, setPlayerData, notify) => {
+const CRAFT_ITEM = (bar, playerData, setPlayerData, notify, qty = 1) => {
 	const cost = RESOURCES.craft[bar].cost;
 	const currentItems = playerData.items;
 	let resourceCheck = true;
@@ -342,7 +342,7 @@ const CRAFT_ITEM = (bar, playerData, setPlayerData, notify) => {
 	});
 
 	if (resourceCheck) {
-		currentItems[bar] = currentItems[bar] ? currentItems[bar] + 1 : 1;
+		currentItems[bar] = currentItems[bar] ? currentItems[bar] + qty : qty;
 		setPlayerData({ ...playerData, items: currentItems });
 	}
 };
@@ -395,11 +395,11 @@ const SELL_RESOURCE = (playerData, setPlayerData, resource, qty, notify) => {
 };
 
 // Function to check if the player has enough resources for a specific cost. Disable button if true.
-const CHECK_DISABLED = (playerData, cost) => {
+const CHECK_DISABLED = (playerData, cost, qty = 1) => {
 	let disabled = false;
 	Object.entries(cost).forEach(([resource, amount]) => {
 		if (disabled) return;
-		if (!playerData.items[resource] || playerData.items[resource] < amount) {
+		if (!playerData.items[resource] || playerData.items[resource] < amount * qty) {
 			disabled = true;
 			return;
 		}

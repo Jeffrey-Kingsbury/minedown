@@ -47,6 +47,7 @@ const Recruiter = () => {
 							setQty(100);
 						}}
 					/>
+					<hr />
 				</span>
 				<span>
 					Total Miners: {playerData.miners.miner ? playerData.miners.miner : 0}
